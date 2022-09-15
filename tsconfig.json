@@ -1,16 +1,24 @@
 {
   "compilerOptions": {
+    // Type Checking
+    "strict": true,
+    // Modules
     "module": "commonjs",
+    "baseUrl": "./",
+    // Emit
     "declaration": true,
+    "outDir": "./dist",
     "removeComments": true,
+    "sourceMap": true,
+    // Language And Environment
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    // Interop Constraints
+    "allowSyntheticDefaultImports": true,
+    // Projects
     "incremental": true,
+    // Completeness
     "skipLibCheck": true
   }
 }
