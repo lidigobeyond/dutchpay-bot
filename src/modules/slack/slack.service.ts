@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ModalView, WebClient } from '@slack/web-api';
+import { WebClient } from '@slack/web-api';
 import { SLACK_CONFIG } from './slack.constant';
 import { WebAPICallResult } from '@slack/web-api/dist/WebClient';
 import { SlackConfig } from './slack.module';
+import { IModal } from './dto/modals/modal.interface';
 
 @Injectable()
 export class SlackService {
@@ -17,7 +18,7 @@ export class SlackService {
   /**
    * 사용자에게 모달을 엽니다.
    */
-  openView(triggerId: string, view: ModalView): Promise<WebAPICallResult> {
-    return this.webClient.views.open({ trigger_id: triggerId, view });
+  openView(triggerId: string, modal: IModal): Promise<WebAPICallResult> {
+    return this.webClient.views.open({ trigger_id: triggerId, view: modal.toModalView() });
   }
 }

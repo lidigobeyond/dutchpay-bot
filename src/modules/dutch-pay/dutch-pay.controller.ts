@@ -1,20 +1,16 @@
-import { Controller, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { SlackService } from '../slack/slack.service';
-import { PlainTextElement } from '../slack/dto/plain-text-element.dto';
-import { ModalView } from '../slack/dto/modal.view.dto';
+import { Body, Controller, Post } from '@nestjs/common';
+import { SlashCommandPayload } from '../slack/dto/payloads/slash-command.payload';
+import { ClassTransformPipe } from '../../common/pipes/class-transform.pipe';
+import { DutchPayService } from './dutch-pay.service';
 
 @Controller('dutch-pay')
 export class DutchPayController {
-  constructor(private readonly slackService: SlackService) {}
+  constructor(private readonly dutchPayService: DutchPayService) {}
 
-  @Post()
-  start(@Req() req: Request, @Res() res: Response): void {
-    const triggerId = req.body['trigger_id'];
+  @Post('slash-command-was-invoked')
+  slashCommandWasInvoked(@Body(ClassTransformPipe) slashCommandPayload: SlashCommandPayload): Promise<void> {
+    const { triggerId, text: title } = slashCommandPayload;
 
-    this.slackService.openView(
-      triggerId,
-      new ModalView(new PlainTextElement('Hello World~!'), []),
-    );
+    return this.dutchPayService.openNewDutchPayModal(triggerId, title);
   }
 }

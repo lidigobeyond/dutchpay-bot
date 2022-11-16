@@ -17,6 +17,7 @@
     "target": "es2017",
     // Interop Constraints
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     // Projects
     "incremental": true,
     // Completeness
