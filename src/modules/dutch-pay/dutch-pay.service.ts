@@ -7,6 +7,6 @@ export class DutchPayService {
   constructor(private readonly slackService: SlackService) {}
 
   async openNewDutchPayModal(triggerId: string, title?: string): Promise<void> {
-    await this.slackService.openView(triggerId, new DutchPayModal(title));
+    await this.slackService.openModal(triggerId, new DutchPayModal(title));
   }
 }

@@ -8,9 +8,7 @@ export interface SlackConfig {
 }
 
 export interface SlackAsyncConfig {
-  imports?: Array<
-    Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
-  >;
+  imports?: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference>;
   inject?: any[];
   useFactory: (...args: any[]) => Promise<SlackConfig> | SlackConfig;
   isGlobal: boolean;
@@ -31,12 +29,7 @@ export interface SlackAsyncConfig {
   ],
 })
 export class SlackModule {
-  static registerAsync({
-    imports = [],
-    inject = [],
-    useFactory,
-    isGlobal,
-  }: SlackAsyncConfig): DynamicModule {
+  static registerAsync({ imports = [], inject = [], useFactory, isGlobal }: SlackAsyncConfig): DynamicModule {
     return {
       module: SlackModule,
       imports: [...imports],
