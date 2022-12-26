@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { SlashCommandPayload } from '../slack/dto/payloads/slash-command.payload';
 import { ClassTransformPipe } from '../../common/pipes/class-transform.pipe';
 import { SlackService } from '../slack/slack.service';
-import { DutchPayModal } from '../slack/dto/modals/dutch-pay.modal.dto';
+import { DutchPayModal } from './dto/dutch-pay.modal.dto';
 
 @Controller('dutch-pay')
 export class DutchPayController {

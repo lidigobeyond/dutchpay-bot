@@ -17,8 +17,19 @@ export class SlackService {
 
   /**
    * 사용자에게 모달을 엽니다.
+   * @param triggerId
+   * @param modal
    */
   openModal(triggerId: string, modal: IModal): Promise<WebAPICallResult> {
     return this.webClient.views.open({ trigger_id: triggerId, view: modal.toModalView() });
+  }
+
+  /**
+   * 사용자가 보고 있는 모달을 업데이트합니다.
+   * @param viewId
+   * @param modal
+   */
+  updateModal(viewId: string, modal: IModal): Promise<WebAPICallResult> {
+    return this.webClient.views.update({ view_id: viewId, view: modal.toModalView() });
   }
 }
