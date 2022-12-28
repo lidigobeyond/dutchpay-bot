@@ -17,7 +17,7 @@ export class DutchPayController {
     await this.slackService.openModal(triggerId, new DutchPayModal({ title }));
   }
 
-  @Post('interaction-component-was-used')
+  @Post('interaction-occurred')
   handleInteraction(@Body('payload', ClassTransformPipe) blockActionsPayload: BlockActionsPayload): void {
     const { actions } = blockActionsPayload;
 
