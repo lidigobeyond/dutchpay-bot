@@ -10,8 +10,15 @@ import { BlockActionsPayload } from '../slack/dto/payloads/block-actions.payload
 export class DutchPayController {
   constructor(private readonly slackService: SlackService, private readonly eventEmitter: EventEmitter2) {}
 
+  @Post('slash-command-was-invoked')
+  async handleSlashCommand(@Body(ClassTransformPipe) payload: SlashCommandPayload): Promise<void> {
+    const { triggerId, text: title } = payload;
+
+    await this.slackService.openModal(triggerId, new DutchPayModal({ title }));
+  }
+
   @Post('interaction-component-was-used')
-  interactionComponentWasUsed(@Body('payload', ClassTransformPipe) blockActionsPayload: BlockActionsPayload): void {
+  handleInteraction(@Body('payload', ClassTransformPipe) blockActionsPayload: BlockActionsPayload): void {
     const { actions } = blockActionsPayload;
 
     this.eventEmitter.emit(actions[0].actionId, blockActionsPayload);
@@ -35,12 +42,5 @@ export class DutchPayController {
     dutchPayModal.addParticipant({ id: selectedUserId });
 
     await this.slackService.updateModal(viewId, dutchPayModal);
-  }
-
-  @Post('slash-command-was-invoked')
-  async slashCommandWasInvoked(@Body(ClassTransformPipe) slashCommandPayload: SlashCommandPayload): Promise<void> {
-    const { triggerId, text: title } = slashCommandPayload;
-
-    await this.slackService.openModal(triggerId, new DutchPayModal({ title }));
   }
 }
