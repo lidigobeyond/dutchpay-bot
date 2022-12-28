@@ -8,7 +8,7 @@ import { UsersSelectElement } from '../../slack/dto/block-elements/users-select-
 import { InputBlock } from '../../slack/dto/blocks/input-block.dto';
 import { HeaderBlock } from '../../slack/dto/blocks/header-block.dto';
 import { ActionsBlock } from '../../slack/dto/blocks/actions-block.dto';
-import { StateOfView } from '../../slack/dto/payloads/block-actions.payload';
+import { StateOfView } from '../../slack/dto/payloads/block-actions-payload.dto';
 
 export type DutchPayParticipant = {
   id: string;

@@ -3,12 +3,12 @@ import { plainToInstance } from 'class-transformer';
 
 export class ClassTransformPipe implements PipeTransform<any> {
   transform(value: any, { metatype }: ArgumentMetadata) {
-    if (metatype === undefined) {
+    if (typeof value !== 'object') {
       return value;
     }
 
-    if (typeof value !== 'object') {
-      value = JSON.parse(value);
+    if (metatype === undefined) {
+      return value;
     }
 
     return plainToInstance(metatype, value);

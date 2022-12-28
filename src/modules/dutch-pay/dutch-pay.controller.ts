@@ -1,10 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { SlashCommandPayload } from '../slack/dto/payloads/slash-command.payload';
+import { SlashCommandPayload } from '../slack/dto/payloads/slash-command-payload.dto';
 import { ClassTransformPipe } from '../../common/pipes/class-transform.pipe';
 import { SlackService } from '../slack/slack.service';
 import { DutchPayModal } from './dto/dutch-pay.modal.dto';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { BlockActionsPayload } from '../slack/dto/payloads/block-actions.payload';
+import { ParseInteractionPayloadPipe } from '../slack/pipes/parse-interaction-payload.pipe';
+import { BlockActionsPayload } from '../slack/dto/payloads/block-actions-payload.dto';
+import { InteractionPayload } from '../slack/dto/payloads/interaction-payload.dto';
 
 @Controller('dutch-pay')
 export class DutchPayController {
@@ -18,10 +20,16 @@ export class DutchPayController {
   }
 
   @Post('interaction-occurred')
-  handleInteraction(@Body('payload', ClassTransformPipe) blockActionsPayload: BlockActionsPayload): void {
-    const { actions } = blockActionsPayload;
+  handleInteraction(@Body('payload', ParseInteractionPayloadPipe) payload: InteractionPayload) {
+    if (payload instanceof BlockActionsPayload) {
+      return this.handleBlockActions(payload);
+    }
+  }
 
-    this.eventEmitter.emit(actions[0].actionId, blockActionsPayload);
+  handleBlockActions(payload: BlockActionsPayload) {
+    const { actions } = payload;
+
+    this.eventEmitter.emit(actions[0].actionId, payload);
   }
 
   @OnEvent('user-select')
