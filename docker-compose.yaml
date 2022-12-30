@@ -1,0 +1,21 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-local
+    container_name: app-server
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./src:/app/src
+      - ./.env:/app/.env
+  db:
+    image: mysql:8
+    container_name: app-db
+    ports:
+      - '3306:3306'
+      - '33060:33060'
+    environment:
+      MYSQL_DATABASE: 'dutch-pay'
+      MYSQL_ROOT_PASSWORD: '1234'
