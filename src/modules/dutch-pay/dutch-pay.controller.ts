@@ -2,11 +2,12 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { SlashCommandPayload } from '../slack/dto/payloads/slash-command-payload.dto';
 import { ClassTransformPipe } from '../../common/pipes/class-transform.pipe';
 import { SlackService } from '../slack/slack.service';
-import { DutchPayModal } from './dto/dutch-pay.modal.dto';
+import { DutchPayModal } from './dto/dutch-pay-modal.dto';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { ParseInteractionPayloadPipe } from '../slack/pipes/parse-interaction-payload.pipe';
 import { BlockActionsPayload } from '../slack/dto/payloads/block-actions-payload.dto';
 import { InteractionPayload } from '../slack/dto/payloads/interaction-payload.dto';
+import { DutchPayModalState } from './dto/dutch-pay-modal-state.dto';
 
 @Controller('dutch-pay')
 export class DutchPayController {
@@ -41,14 +42,22 @@ export class DutchPayController {
       return;
     }
 
-    const { id: viewId, state } = view;
-
-    const dutchPayModal = DutchPayModal.fromState(state);
+    const { title, datetime, description, participants } = DutchPayModalState.fromViewState(view.state);
 
     const selectedUserId = (actions[0] as any).selected_user;
 
-    dutchPayModal.addParticipant({ id: selectedUserId });
+    const isDuplicatedParticipant = participants.some((participant) => participant.id === selectedUserId);
+    if (!isDuplicatedParticipant) {
+      participants.push({ id: selectedUserId as string });
+    }
 
-    await this.slackService.updateModal(viewId, dutchPayModal);
+    const dutchPayModal = new DutchPayModal({
+      title,
+      datetime,
+      description,
+      participants,
+    });
+
+    await this.slackService.updateModal(view.id, dutchPayModal);
   }
 }

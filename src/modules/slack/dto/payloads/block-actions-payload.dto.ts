@@ -4,7 +4,7 @@ import { InteractionPayload } from './interaction-payload.dto';
 /**
  * A dictionary of objects. Each object represents a block in the source view that contained stateful, interactive components.
  */
-export class StateOfView {
+export class ViewState {
   values: Record<string, Record<string, any>>;
 }
 
@@ -19,8 +19,8 @@ export class View {
   /**
    * A dictionary of objects. Each object represents a block in the source view that contained stateful, interactive components.
    */
-  @Type(() => StateOfView)
-  state: StateOfView;
+  @Type(() => ViewState)
+  state: ViewState;
 }
 
 /**
