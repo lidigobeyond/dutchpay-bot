@@ -1,7 +1,8 @@
 import { DynamicModule, ForwardReference, Module, Type } from '@nestjs/common';
 import { SlackService } from './slack.service';
 import { SLACK_CONFIG } from './slack.constant';
-import { ConfigService } from '@nestjs/config';
+import { CustomConfigModule } from '../../config/custom-config.module';
+import { CustomConfigService } from '../../config/custom-config.service';
 
 export interface SlackConfig {
   token: string;
@@ -17,11 +18,13 @@ export interface SlackAsyncConfig {
 @Module({
   imports: [
     SlackModule.registerAsync({
-      imports: [],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      imports: [CustomConfigModule],
+      inject: [CustomConfigService],
+      useFactory: (customConfigService: CustomConfigService) => {
+        const { token } = customConfigService.slackConfig;
+
         return {
-          token: configService.get<string>('SLACK_WEB_API_TOKEN', ''),
+          token,
         };
       },
       isGlobal: true,

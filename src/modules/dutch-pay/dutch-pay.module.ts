@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DutchPayController } from './dutch-pay.controller';
 import { DutchPayService } from './dutch-pay.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DutchPayEntity } from './entities/dutch-pay.entity';
+import { ParticipantEntity } from './entities/participant.entity';
 
 @Module({
-  controllers: [DutchPayController],
+  imports: [TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity])],
   providers: [DutchPayService],
+  exports: [DutchPayService],
 })
 export class DutchPayModule {}
