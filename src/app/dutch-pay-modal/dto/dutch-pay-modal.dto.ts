@@ -5,9 +5,9 @@ import { PlainTextElement } from '../../../modules/slack/types/block-elements/pl
 import { PlainTextInputElement, StateOfPlainTextInputElement } from '../../../modules/slack/types/block-elements/plain-text-input-element';
 import { DatePickerElement, StateOfDatePickerElement } from '../../../modules/slack/types/block-elements/date-picker-element';
 import { ConversationSelectElement } from '../../../modules/slack/types/block-elements/conversation-select-element';
-import { InputBlock } from '../../../modules/slack/types/blocks/input-block';
-import { HeaderBlock } from '../../../modules/slack/types/blocks/header-block';
-import { ActionsBlock } from '../../../modules/slack/types/blocks/actions-block';
+import { InputBlock } from '../../../modules/slack/types/layout-blocks/input-block';
+import { HeaderBlock } from '../../../modules/slack/types/layout-blocks/header-block';
+import { ActionsBlock } from '../../../modules/slack/types/layout-blocks/actions-block';
 import { ViewState } from '../../../modules/slack/types/payloads/block-actions-payload';
 import { DUTCH_PAY_MODAL_EXTERNAL_ID, USER_SELECTED_ACTION_ID } from '../dutch-pay.constant';
 

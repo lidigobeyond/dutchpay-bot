@@ -50,27 +50,30 @@ export class DutchPayModalService {
   async handleViewSubmission(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
     const { user, view } = viewSubmissionPayload;
 
-    // 모달 상태 정보 추출
+    // 모달에서 더치 페이 정보 추출
     const dutchPayModal = DutchPayModal.fromViewState(view.state);
 
-    // 더치 페이 정보 저장
-    const { title, date, description, participants } = dutchPayModal;
+    const title = dutchPayModal.title as string;
+    const date = dutchPayModal.date as dayjs.Dayjs;
+    const description = dutchPayModal.description;
+    const participants = dutchPayModal.participants as { id: string; price: string }[];
 
+    // 더치 페이 정보 저장
     const dutchPayEntity = await this.dutchPayService.create({
-      title: title as string,
-      date: (date as dayjs.Dayjs).toDate(),
+      title: title,
+      date: date.toDate(),
       description,
       participants: participants.map((participant) => {
         const { id, price } = participant;
         return {
           userId: id,
-          price: price as string,
+          price: price,
         };
       }),
       createUserId: user.id,
     });
 
-    // 더치 페이 생성 이벤트 발행
+    // 더치 페이 생성 완료 이벤트 발행
     this.eventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchPayEntity.id);
   }
 }

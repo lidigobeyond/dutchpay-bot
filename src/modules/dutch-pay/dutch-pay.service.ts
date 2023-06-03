@@ -49,4 +49,12 @@ export class DutchPayService {
 
     return await this.dutchPayRepository.save(dutchPay);
   }
+
+  /**
+   * 더치 페이 정보를 수정합니다.
+   * @param dutchPay
+   */
+  async update(dutchPay: DutchPayEntity): Promise<DutchPayEntity> {
+    return this.dutchPayRepository.save(dutchPay);
+  }
 }
