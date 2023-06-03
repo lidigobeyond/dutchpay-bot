@@ -37,6 +37,25 @@ export class DutchPayModal implements IModal {
     this.participants = participants ?? [];
   }
 
+  public static fromViewState(state: ViewState): DutchPayModal {
+    const title = (state.values.title_block.title as StateOfPlainTextInputElement).value;
+    const date = (state.values.date_block.date as StateOfDatePickerElement).selected_date;
+    const description = (state.values.description_block.description as StateOfPlainTextInputElement).value;
+    const participants: DutchPayParticipant[] = Object.keys(state.values)
+      .filter((key) => key.startsWith('participant_block/'))
+      .map((key) => {
+        const userId = key.split('/')[1];
+        const price = (state.values[key].price as StateOfPlainTextInputElement).value;
+
+        return {
+          id: userId,
+          price,
+        };
+      });
+
+    return new this({ title, date: dayjs(date), description, participants });
+  }
+
   toModalView(): ModalView {
     return {
       type: 'modal',
@@ -71,7 +90,7 @@ export class DutchPayModal implements IModal {
           }),
           optional: true,
         }),
-        new HeaderBlock('참여자'),
+        new HeaderBlock('참여자 (최대 10명)'),
         ...this.participants.map((participant) => {
           const { id, price } = participant;
 
@@ -101,33 +120,21 @@ export class DutchPayModal implements IModal {
     };
   }
 
-  public static fromViewState(state: ViewState): DutchPayModal {
-    const title = (state.values.title_block.title as StateOfPlainTextInputElement).value;
-    const date = (state.values.date_block.date as StateOfDatePickerElement).selected_date;
-    const description = (state.values.description_block.description as StateOfPlainTextInputElement).value;
-    const participants: DutchPayParticipant[] = Object.keys(state.values)
-      .filter((key) => key.startsWith('participant_block/'))
-      .map((key) => {
-        const userId = key.split('/')[1];
-        const price = (state.values[key].price as StateOfPlainTextInputElement).value;
-
-        return {
-          id: userId,
-          price,
-        };
-      });
-
-    return new this({ title, date: dayjs(date), description, participants });
-  }
-
   /**
    * 참여자를 새로 추가합니다.
    * @param newParticipant
    */
   addParticipant(newParticipant: DutchPayParticipant) {
-    const isDuplicated = this.participants.some((participant) => participant.id === newParticipant.id);
-    if (!isDuplicated) {
-      this.participants.push(newParticipant);
+    // 참여자는 최대 10명까지만 추가 가능
+    if (this.participants.length >= 10) {
+      return;
     }
+
+    const isDuplicated = this.participants.some((participant) => participant.id === newParticipant.id);
+    if (isDuplicated) {
+      return;
+    }
+
+    this.participants.push(newParticipant);
   }
 }
