@@ -9,6 +9,7 @@ import { InputBlock } from '../../../modules/slack/types/blocks/input-block';
 import { HeaderBlock } from '../../../modules/slack/types/blocks/header-block';
 import { ActionsBlock } from '../../../modules/slack/types/blocks/actions-block';
 import { ViewState } from '../../../modules/slack/types/payloads/block-actions-payload';
+import { DUTCH_PAY_MODAL_EXTERNAL_ID, USER_SELECTED_ACTION_ID } from '../dutch-pay.constant';
 
 export type DutchPayParticipant = {
   id: string;
@@ -108,7 +109,7 @@ export class DutchPayModal implements IModal {
           id: 'user_select_block',
           elements: [
             new ConversationSelectElement({
-              actionId: 'user-selected',
+              actionId: USER_SELECTED_ACTION_ID,
               placeholder: '참여자 추가하기',
             }),
           ],
@@ -116,7 +117,7 @@ export class DutchPayModal implements IModal {
       ],
       submit: new PlainTextElement('생성'),
       close: new PlainTextElement('취소'),
-      external_id: 'dutch-pay-modal-view',
+      external_id: DUTCH_PAY_MODAL_EXTERNAL_ID,
     };
   }
 

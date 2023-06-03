@@ -7,6 +7,7 @@ import { BlockActionsPayload } from '../modules/slack/types/payloads/block-actio
 import { ViewSubmissionPayload } from '../modules/slack/types/payloads/view-submission-payload';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AppService } from './app.service';
+import { BLOCK_ACTION, VIEW_SUBMISSION } from './app.constant';
 
 @Controller('dutch-pay-app')
 export class AppController {
@@ -32,12 +33,16 @@ export class AppController {
   handleBlockActions(payload: BlockActionsPayload) {
     const { actions } = payload;
 
-    this.eventEmitter.emit(actions[0].actionId, payload);
+    const ACTION_ID = actions[0].actionId;
+
+    this.eventEmitter.emit(`${BLOCK_ACTION}/${ACTION_ID}`, payload);
   }
 
   handleViewSubmission(payload: ViewSubmissionPayload) {
     const { view } = payload;
 
-    this.eventEmitter.emit(view.external_id, payload);
+    const VIEW_EXTERNAL_ID = view.external_id;
+
+    this.eventEmitter.emit(`${VIEW_SUBMISSION}/${VIEW_EXTERNAL_ID}`, payload);
   }
 }
