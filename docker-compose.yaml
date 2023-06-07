@@ -10,6 +10,13 @@ services:
     volumes:
       - ./src:/app/src
       - ./.env:/app/.env
+    environment:
+      APP_PORT: '3000'
+      DATABASE_HOST: 'db'
+      DATABASE_PORT: '3306'
+      DATABASE_NAME: 'dutch-pay'
+      DATABASE_USER_NAME: 'root'
+      DATABASE_PASSWORD: '1234'
   db:
     image: mysql:8
     container_name: app-db
