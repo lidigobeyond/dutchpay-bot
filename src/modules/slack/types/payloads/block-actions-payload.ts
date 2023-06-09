@@ -35,6 +35,25 @@ export class View implements ModalView {
 }
 
 /**
+ * 참고 : https://api.slack.com/reference/interaction-payloads/block-actions#examples
+ */
+export class Message {
+  bot_id: string;
+
+  type: 'message';
+
+  text: string;
+
+  user: string;
+
+  team: string;
+
+  ts: string;
+
+  blocks: Record<string, any>[];
+}
+
+/**
  * Contains data from the specific interactive component that was used.
  */
 export class Action {
@@ -72,6 +91,12 @@ export class BlockActionsPayload extends InteractionPayload {
    */
   @Type(() => View)
   view?: View;
+
+  /**
+   * The message where this block action took place
+   */
+  @Type(() => Message)
+  message?: Message;
 
   /**
    * Contains data from the specific interactive component that was used.

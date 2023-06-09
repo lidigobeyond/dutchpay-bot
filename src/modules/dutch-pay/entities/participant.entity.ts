@@ -10,6 +10,14 @@ export class ParticipantEntity {
     type: 'varchar',
     length: 255,
     nullable: true,
+    comment: '슬랙 메시지가 발송된 채널 ID\n' + '슬랙 메시지를 수정하거나 삭제할 때 필요함.',
+  })
+  channelId: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
     comment: '슬랙 메시지 타임스탬프\n' + '슬랙 메시지를 수정하거나 삭제할 때 필요함.',
   })
   ts: string;

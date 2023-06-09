@@ -11,14 +11,14 @@ export interface DutchPayCreatedMessageArgs {
   title: string;
   date: dayjs.Dayjs;
   description?: string;
-  participants: { userId: string; price: string }[];
+  participants: { userId: string; price: string; isPayBack: boolean }[];
 }
 
 export class DutchPayCreatedMessage implements IMessage {
   private readonly title: string;
   private readonly date: dayjs.Dayjs;
   private readonly description?: string;
-  private readonly participants: { userId: string; price: string }[];
+  private readonly participants: { userId: string; price: string; isPayBack: boolean }[];
 
   constructor(args: DutchPayCreatedMessageArgs) {
     const { title, date, description, participants } = args;
@@ -57,9 +57,13 @@ export class DutchPayCreatedMessage implements IMessage {
       new SingleSectionBlock({ text: new MarkDownElement('*참여자*') }),
       new MultiSectionBlock({ fields: [new MarkDownElement('*닉네임:*'), new MarkDownElement('*내야 할 금액:*')] }),
       ...this.participants.map((participant) => {
-        const { userId, price } = participant;
+        const { userId, price, isPayBack } = participant;
 
-        return new MultiSectionBlock({ fields: [new MarkDownElement(`<@${userId}>`), new MarkDownElement(price)] });
+        if (isPayBack) {
+          return new MultiSectionBlock({ fields: [new MarkDownElement(`~<@${userId}>~`), new MarkDownElement(`~${price}~ (입금완료)`)] });
+        } else {
+          return new MultiSectionBlock({ fields: [new MarkDownElement(`<@${userId}>`), new MarkDownElement(price)] });
+        }
       }),
       new DividerBlock(),
     ];

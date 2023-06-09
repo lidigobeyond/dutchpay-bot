@@ -5,6 +5,8 @@ import { WebAPICallResult } from '@slack/web-api/dist/WebClient';
 import { SlackConfig } from './slack.module';
 import { IModal } from './interfaces/modal.interface';
 import { IMessage } from './interfaces/message.interface';
+import { ChatPostMessageResponse } from '@slack/web-api/dist/response/ChatPostMessageResponse';
+import { ChatUpdateResponse } from '@slack/web-api/dist/response/ChatUpdateResponse';
 
 @Injectable()
 export class SlackService {
@@ -37,16 +39,32 @@ export class SlackService {
   }
 
   /**
-   * 채널(또는 DM)에 메시지를 게시합니다.
+   * 채널(또는 DM)에 구조적인 메시지를 게시합니다.
    * 참고 : https://api.slack.com/methods/chat.postMessage
    */
-  postMessage(args: { channelId: string; message: IMessage; summary: string }): Promise<WebAPICallResult> {
-    const { channelId, message, summary } = args;
+  postMessage(args: { channelId: string; message?: IMessage; text: string }): Promise<ChatPostMessageResponse> {
+    const { channelId, message, text } = args;
 
     return this.webClient.chat.postMessage({
       channel: channelId,
-      blocks: message.toBlocks(),
-      text: summary,
+      blocks: message?.toBlocks(),
+      text,
+    });
+  }
+
+  /**
+   * 발송했던 메시지 내용을 수정합니다.
+   * 참고 : https://api.slack.com/methods/chat.update
+   * @param args
+   */
+  updateMessage(args: { channelId: string; ts: string; message?: IMessage; text: string }): Promise<ChatUpdateResponse> {
+    const { channelId, ts, message, text } = args;
+
+    return this.webClient.chat.update({
+      channel: channelId,
+      ts,
+      blocks: message?.toBlocks(),
+      text: text,
     });
   }
 }

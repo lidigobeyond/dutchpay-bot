@@ -6,7 +6,7 @@ import { PlainTextElement } from '../../../modules/slack/types/block-elements/pl
 import { DividerBlock } from '../../../modules/slack/types/layout-blocks/divider-block';
 import { MarkDownElement } from '../../../modules/slack/types/block-elements/mark-down-element';
 import { ButtonElement } from '../../../modules/slack/types/block-elements/button-element';
-import { DUTCH_PAY_REQUEST_MESSAGE_PAY_BACK_ACTION_ID } from '../dutch-pay-request-message.constant';
+import { PAID_BACK_ACTION_ID } from '../dutch-pay-request-message.constant';
 
 export interface DutchPayRequestMessageArgs {
   createUserId: string;
@@ -68,7 +68,7 @@ export class DutchPayRequestMessage implements IMessage {
         if (this.isPayBack) {
           return [
             new SingleSectionBlock({
-              text: new PlainTextElement(`입금 완료하셨습니다 👍`),
+              text: new PlainTextElement(`${dayjs().format('YYYY년 M월 D일 A h:mm:ss')} 에 입금 완료 처리하셨습니다 👍`),
             }),
           ];
         } else {
@@ -76,7 +76,7 @@ export class DutchPayRequestMessage implements IMessage {
             new SingleSectionBlock({
               text: new PlainTextElement(`입금 완료하셨다면 '입금 완료' 버튼을 눌러주세요.`),
               accessory: new ButtonElement({
-                actionId: DUTCH_PAY_REQUEST_MESSAGE_PAY_BACK_ACTION_ID,
+                actionId: PAID_BACK_ACTION_ID,
                 text: new PlainTextElement('입금 완료'),
                 style: 'primary',
                 confirm: {

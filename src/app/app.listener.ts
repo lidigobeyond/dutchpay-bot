@@ -1,6 +1,6 @@
 import { AppService } from './app.service';
 import { OnEvent } from '@nestjs/event-emitter';
-import { DUTCH_PAY_CREATED_EVENT } from './app.constant';
+import { DUTCH_PAY_CREATED_EVENT, PARTICIPANT_PAID_BACK_EVENT } from './app.constant';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -17,5 +17,14 @@ export class AppListener {
     await this.appService.sendDutchPayRequestMessage(dutchPayId);
     // 더치 페이를 생성한 유저에게 생성 완료 메시지 발송
     await this.appService.sendDutchPayCreatedMessage(dutchPayId);
+  }
+
+  /**
+   * 참가자가 입금 완료했을 때 발생하는 이벤트를 처리합니다.
+   * @param participantId
+   */
+  @OnEvent(PARTICIPANT_PAID_BACK_EVENT, { async: true })
+  async handleParticipantPaidBack(participantId: number): Promise<void> {
+    return this.appService.handleParticipantPaidBack(participantId);
   }
 }

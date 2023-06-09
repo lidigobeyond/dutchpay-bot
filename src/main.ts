@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import './common/dayjs/dayjs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 

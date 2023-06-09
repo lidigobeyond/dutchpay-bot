@@ -25,13 +25,8 @@ export class DutchPayModalService {
   async handleUserSelected(blockActionsPayload: BlockActionsPayload): Promise<void> {
     const { view, actions } = blockActionsPayload;
 
-    if (!view) {
-      // TODO: 예외처리 로직
-      throw new Error('');
-    }
-
     // 모달 상태 정보 추출
-    const dutchPayModal = DutchPayModal.fromViewState(view.state);
+    const dutchPayModal = DutchPayModal.fromViewState(view!.state);
 
     // 선택된 사용자 아이디 추출
     const selectedUserId = (actions[0] as any).selected_conversation;
@@ -40,7 +35,7 @@ export class DutchPayModalService {
     dutchPayModal.addParticipant({ id: selectedUserId });
 
     // 모달 업데이트
-    await this.slackService.updateModal(view.id, dutchPayModal);
+    await this.slackService.updateModal(view!.id, dutchPayModal);
   }
 
   /**
