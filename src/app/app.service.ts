@@ -32,81 +32,85 @@ export class AppService {
   }
 
   /**
-   * 더치 페이 참여자들에게 더치 페이 요청 메시지를 보냅니다.
+   * 더치 페이 생성 이벤트를 처리합니다.
    * @param dutchPayId
    */
-  async sendDutchPayRequestMessage(dutchPayId: number): Promise<void> {
+  async handleDutchPayCreated(dutchPayId: number): Promise<void> {
     // 더치 페이 정보 조회
-    const dutchPayEntity = await this.dutchPayRepository.findOne({
+    const dutchPay = await this.dutchPayRepository.findOne({
       where: {
         id: dutchPayId,
       },
       relations: {
-        participants: true,
+        participants: { dutchPay: true },
       },
     });
 
-    if (!dutchPayEntity) {
+    if (!dutchPay) {
       // TODO: 예외 처리
       throw new Error();
     }
 
-    const { createUserId, title, date, description } = dutchPayEntity;
-
-    for (let i = 0; i < dutchPayEntity.participants.length; i++) {
-      const { userId: participantId, price, isPayBack } = dutchPayEntity.participants[i];
-
-      // 더치 페이 요청 메시지 발송
-      const response = await this.slackService.postMessage({
-        channelId: participantId,
-        text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
-        message: new DutchPayRequestMessage({
-          createUserId,
-          title,
-          date: dayjs(date),
-          description,
-          price,
-          isPayBack,
-        }),
-      });
+    // 모든 참여자에게 더치 페이 요청 메시지 발송
+    for (const participant of dutchPay.participants) {
+      const response = await this.sendDutchPayRequestMessage(participant);
 
       if (!response.ok) {
         // TODO: 예외 처리
         throw new Error();
       }
 
-      // 더치 페이 요청 메시지 정보 저장
-      dutchPayEntity.participants[i].channelId = response.channel!;
-      dutchPayEntity.participants[i].ts = response.ts!;
+      participant.channelId = response.channel!;
+      participant.ts = response.ts!;
     }
 
-    await this.dutchPayRepository.save(dutchPayEntity);
-  }
+    // 더치 페이를 생성한 유저에게 더치 페이 생성 완료 메시지 발송
+    const response = await this.sendDutchPayCreatedMessage(dutchPay);
 
-  /**
-   * 더치 페이를 생성한 유저에게 더치 페이 생성 완료 메시지를 보냅니다.
-   * @param dutchPayId
-   */
-  async sendDutchPayCreatedMessage(dutchPayId: number): Promise<void> {
-    // 더치 페이 정보 조회
-    const dutchPayEntity = await this.dutchPayRepository.findOne({
-      where: {
-        id: dutchPayId,
-      },
-      relations: {
-        participants: true,
-      },
-    });
-
-    if (!dutchPayEntity) {
+    if (!response.ok) {
       // TODO: 예외 처리
       throw new Error();
     }
 
-    const { createUserId, title, date, description, participants } = dutchPayEntity;
+    dutchPay.channelId = response.channel!;
+    dutchPay.ts = response.ts!;
+
+    // 발송한 메시지 정보 저장
+    await this.dutchPayRepository.save(dutchPay);
+  }
+
+  /**
+   * 더치 페이 참여자들에게 더치 페이 요청 메시지를 보냅니다.
+   * @param participant
+   */
+  sendDutchPayRequestMessage(participant: ParticipantEntity) {
+    const { userId: participantId, price, isPayBack, dutchPay } = participant;
+    const { createUserId, title, date, description } = dutchPay;
+
+    // 더치 페이 요청 메시지 발송
+    return this.slackService.postMessage({
+      channelId: participantId,
+      text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
+      message: new DutchPayRequestMessage({
+        createUserId,
+        title,
+        date: dayjs(date),
+        description,
+        price,
+        isPayBack,
+      }),
+    });
+  }
+
+  /**
+   * 더치 페이를 생성한 유저에게 더치 페이 생성 완료 메시지를 보냅니다.
+   * @param dutchPay
+   */
+  sendDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
+    const { createUserId, title, date, description, participants } = dutchPay;
 
     // 더치 페이 생성 완료 메시지 발송
-    const response = await this.slackService.postMessage({
+    return this.slackService.postMessage({
       channelId: createUserId,
       text: '더치 페이가 생성되었습니다.',
       message: new DutchPayCreatedMessage({
@@ -116,21 +120,10 @@ export class AppService {
         participants,
       }),
     });
-
-    if (!response.ok) {
-      // TODO: 예외 처리
-      throw new Error();
-    }
-
-    // 더치 페이 생성 완료 메시지 정보 저장
-    dutchPayEntity.channelId = response.channel!;
-    dutchPayEntity.ts = response.ts!;
-
-    await this.dutchPayRepository.save(dutchPayEntity);
   }
 
   /**
-   * 참여자가 입금 완료했을 때 발생하는 이벤트를 처리합니다.
+   * 입금 완료 이벤트를 처리합니다.
    * @param participantId
    */
   async handleParticipantPaidBack(participantId: number): Promise<void> {
