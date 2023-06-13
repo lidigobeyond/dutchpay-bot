@@ -10,12 +10,14 @@ import { DutchPayRequestMessageModule } from './dutch-pay-request-message/dutch-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DutchPayEntity } from '../modules/dutch-pay/entities/dutch-pay.entity';
 import { ParticipantEntity } from '../modules/dutch-pay/entities/participant.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     CustomConfigModule,
     CustomEventEmitterModule,
     DatabaseModule,
+    ScheduleModule.forRoot(),
     DutchPayModalModule,
     DutchPayRequestMessageModule,
     TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity]),

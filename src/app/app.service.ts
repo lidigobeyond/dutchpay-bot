@@ -202,4 +202,32 @@ export class AppService {
       text: `<@${participantId}> 님께서 입금 완료하셨다고 합니다. 입금 내역을 확인해보세요.`,
     });
   }
+
+  /**
+   * 입금 완료하지 않은 더치 페이 참여자에게 리마인드 메시지를 보냅니다.
+   */
+  async sendRemindMessage(): Promise<void> {
+    this.logger.log(`리마인드 메시지 발송 시작`);
+
+    // 입금 완료하지 않은 더치 페이 참여자 목록 조회
+    const participants = await this.participantRepository.findBy({
+      isPayBack: false,
+    });
+
+    this.logger.log(`리마인드 메시지 발송 대상자 = ${participants.length}명`);
+
+    // 리마인드 메시지 발송
+    for (const participant of participants) {
+      const { userId: participantId, ts } = participant;
+
+      await this.slackService.replyMessage({
+        channelId: participantId,
+        ts,
+        text: `(띵동) 입금 완료하셨나요? 입금 완료하셨다면 '입금 완료' 버튼을 눌러주세요.`,
+        broadcast: true,
+      });
+    }
+
+    this.logger.log(`리마인드 메시지 발송 완료!`);
+  }
 }
