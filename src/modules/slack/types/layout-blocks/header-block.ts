@@ -1,5 +1,5 @@
 import { HeaderBlock as Parent } from '@slack/web-api';
-import { PlainTextElement } from '../block-elements/plain-text-element';
+import { PlainTextElement } from '../composition-objects/plain-text-element';
 
 /**
  * A header is a plain-text block that displays in a larger, bold font. Use it to delineate between different groups of content in your app's surfaces.

@@ -1,6 +1,6 @@
 import { AppService } from './app.service';
 import { OnEvent } from '@nestjs/event-emitter';
-import { DUTCH_PAY_CREATED_EVENT, PARTICIPANT_PAID_BACK_EVENT } from './app.constant';
+import { DUTCH_PAY_CREATED_EVENT, DUTCH_PAY_DELETED_EVENT, PARTICIPANT_PAID_BACK_EVENT } from './app.constant';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
@@ -8,22 +8,19 @@ import { Cron } from '@nestjs/schedule';
 export class AppListener {
   constructor(private readonly appService: AppService) {}
 
-  /**
-   * 더치 페이 생성 이벤트를 처리합니다.
-   * @param dutchPayId
-   */
   @OnEvent(DUTCH_PAY_CREATED_EVENT, { async: true })
   handleDutchPayCreated(dutchPayId: number): Promise<void> {
     return this.appService.handleDutchPayCreated(dutchPayId);
   }
 
-  /**
-   * 입금 완료 이벤트를 처리합니다.
-   * @param participantId
-   */
   @OnEvent(PARTICIPANT_PAID_BACK_EVENT, { async: true })
   handleParticipantPaidBack(participantId: number): Promise<void> {
     return this.appService.handleParticipantPaidBack(participantId);
+  }
+
+  @OnEvent(DUTCH_PAY_DELETED_EVENT, { async: true })
+  handleDutchPayDeleted(dutchPayId: number): Promise<void> {
+    return this.appService.handleDutchPayDeleted(dutchPayId);
   }
 
   /**

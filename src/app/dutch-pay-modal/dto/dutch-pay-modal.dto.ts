@@ -1,7 +1,7 @@
 import { IModal } from '../../../modules/slack/interfaces/modal.interface';
 import dayjs from 'dayjs';
 import { ModalView } from '@slack/web-api';
-import { PlainTextElement } from '../../../modules/slack/types/block-elements/plain-text-element';
+import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
 import { PlainTextInputElement, StateOfPlainTextInputElement } from '../../../modules/slack/types/block-elements/plain-text-input-element';
 import { DatePickerElement, StateOfDatePickerElement } from '../../../modules/slack/types/block-elements/date-picker-element';
 import { ConversationSelectElement } from '../../../modules/slack/types/block-elements/conversation-select-element';

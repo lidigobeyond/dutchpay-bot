@@ -1,11 +1,11 @@
 import { ConversationsSelect as Parent } from '@slack/web-api';
-import { PlainTextElement } from './plain-text-element';
+import { PlainTextElement } from '../composition-objects/plain-text-element';
 
-export type UsersSelectElementArgs = {
+export interface UsersSelectElementArgs {
   actionId: string;
   initialUser?: string;
   placeholder?: string;
-};
+}
 
 /**
  * A select menu, just as with a standard HTML <select> tag, creates a drop down menu with a list of options for a user to choose.

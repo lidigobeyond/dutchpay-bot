@@ -1,11 +1,11 @@
 import { Datepicker as Parent } from '@slack/web-api';
-import { PlainTextElement } from './plain-text-element';
+import { PlainTextElement } from '../composition-objects/plain-text-element';
 
-export type DatePickerElementArgs = {
+export interface DatePickerElementArgs {
   actionId: string;
   initialDate?: string;
   placeholder?: string;
-};
+}
 
 /**
  * An element which lets users easily select a date from a calendar style UI.

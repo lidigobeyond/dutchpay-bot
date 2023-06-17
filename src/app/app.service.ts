@@ -85,7 +85,7 @@ export class AppService {
    */
   sendDutchPayRequestMessage(participant: ParticipantEntity) {
     const { userId: participantId, price, isPayBack, dutchPay } = participant;
-    const { createUserId, title, date, description } = dutchPay;
+    const { createUserId, title, date, description, isDeleted: isDutchPayDeleted } = dutchPay;
 
     // 더치 페이 요청 메시지 발송
     return this.slackService.postMessage({
@@ -96,6 +96,7 @@ export class AppService {
         title,
         date: dayjs(date),
         description,
+        isDutchPayDeleted,
         price,
         isPayBack,
       }),
@@ -107,7 +108,7 @@ export class AppService {
    * @param dutchPay
    */
   sendDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
-    const { createUserId, title, date, description, participants } = dutchPay;
+    const { createUserId, title, date, description, participants, isDeleted } = dutchPay;
 
     // 더치 페이 생성 완료 메시지 발송
     return this.slackService.postMessage({
@@ -118,6 +119,7 @@ export class AppService {
         date: dayjs(date),
         description,
         participants,
+        isDeleted,
       }),
     });
   }
@@ -152,7 +154,7 @@ export class AppService {
    */
   updateDutchPayRequestMessage(participant: ParticipantEntity) {
     const { channelId, ts, price, isPayBack, dutchPay } = participant;
-    const { createUserId, title, date, description } = dutchPay;
+    const { createUserId, title, date, description, isDeleted: isDutchPayDeleted } = dutchPay;
 
     return this.slackService.updateMessage({
       channelId,
@@ -163,6 +165,7 @@ export class AppService {
         title,
         date: dayjs(date),
         description,
+        isDutchPayDeleted,
         price,
         isPayBack,
       }),
@@ -174,7 +177,7 @@ export class AppService {
    * @param dutchPay
    */
   updateDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
-    const { channelId, ts, title, date, description, participants } = dutchPay;
+    const { channelId, ts, title, date, description, participants, isDeleted } = dutchPay;
 
     return this.slackService.updateMessage({
       channelId,
@@ -185,6 +188,7 @@ export class AppService {
         date: dayjs(date),
         description,
         participants,
+        isDeleted,
       }),
     });
   }
@@ -201,6 +205,45 @@ export class AppService {
       channelId: createUserId,
       text: `<@${participantId}> 님께서 입금 완료하셨다고 합니다. 입금 내역을 확인해보세요.`,
     });
+  }
+
+  /**
+   * 더치 페이 삭제 이벤트를 처리합니다.
+   * @param dutchPayId
+   */
+  async handleDutchPayDeleted(dutchPayId: number): Promise<void> {
+    // 더치 페이 정보 조회
+    const dutchPay = await this.dutchPayRepository.findOne({
+      where: {
+        id: dutchPayId,
+      },
+      relations: {
+        participants: { dutchPay: true },
+      },
+    });
+
+    if (!dutchPay) {
+      // TODO: 예외 처리
+      throw new Error();
+    }
+
+    for (const participant of dutchPay.participants) {
+      // 더치 페이 참여자에게 발송했던 더치 페이 요청 메시지 수정
+      const response = await this.updateDutchPayRequestMessage(participant);
+
+      if (!response.ok) {
+        // TODO: 예외 처리
+        throw new Error();
+      }
+    }
+
+    // 더치 페이를 생성한 유저에게 발송했던 더치 페이 생성 완료 메시지 수정
+    const response = await this.updateDutchPayCreatedMessage(dutchPay);
+
+    if (!response.ok) {
+      // TODO: 예외 처리
+      throw new Error();
+    }
   }
 
   /**

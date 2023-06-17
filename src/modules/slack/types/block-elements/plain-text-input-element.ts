@@ -1,12 +1,12 @@
 import { PlainTextInput as Parent } from '@slack/web-api';
-import { PlainTextElement } from './plain-text-element';
+import { PlainTextElement } from '../composition-objects/plain-text-element';
 
-export type PlainTextInputElementArgs = {
+export interface PlainTextInputElementArgs {
   actionId: string;
   initialValue?: string;
   placeholder?: string;
   multiline?: boolean;
-};
+}
 
 /**
  * A plain-text input, similar to the HTML <input> tag, creates a field where a user can enter freeform data.

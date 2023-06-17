@@ -2,16 +2,21 @@ import { IMessage } from '../../../modules/slack/interfaces/message.interface';
 import { Block, KnownBlock } from '@slack/web-api';
 import dayjs from 'dayjs';
 import { MultiSectionBlock } from '../../../modules/slack/types/layout-blocks/multi-section-block';
-import { PlainTextElement } from '../../../modules/slack/types/block-elements/plain-text-element';
-import { MarkDownElement } from '../../../modules/slack/types/block-elements/mark-down-element';
+import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
+import { MarkDownElement } from '../../../modules/slack/types/composition-objects/mark-down-element';
 import { SingleSectionBlock } from '../../../modules/slack/types/layout-blocks/single-section-block';
 import { DividerBlock } from '../../../modules/slack/types/layout-blocks/divider-block';
+import { OverflowMenuElement } from '../../../modules/slack/types/block-elements/overflow-menu-element';
+import { ConfirmationDialogElement } from '../../../modules/slack/types/composition-objects/confirmation-dialog-element';
+import { PlainTextOptionElement } from '../../../modules/slack/types/composition-objects/plain-text-option-element';
+import { DELETE_DUTCH_PAY_ACTION_ID } from '../dutch-pay-created-message.constant';
 
 export interface DutchPayCreatedMessageArgs {
   title: string;
   date: dayjs.Dayjs;
   description?: string;
   participants: { userId: string; price: string; isPayBack: boolean }[];
+  isDeleted: boolean;
 }
 
 export class DutchPayCreatedMessage implements IMessage {
@@ -19,19 +24,42 @@ export class DutchPayCreatedMessage implements IMessage {
   private readonly date: dayjs.Dayjs;
   private readonly description?: string;
   private readonly participants: { userId: string; price: string; isPayBack: boolean }[];
+  private readonly isDeleted: boolean;
 
   constructor(args: DutchPayCreatedMessageArgs) {
-    const { title, date, description, participants } = args;
+    const { title, date, description, participants, isDeleted } = args;
 
     this.title = title;
     this.date = date;
     this.description = description;
     this.participants = participants;
+    this.isDeleted = isDeleted;
   }
 
   toBlocks(): (KnownBlock | Block)[] {
+    if (this.isDeleted) {
+      return [new SingleSectionBlock({ text: new MarkDownElement('더치 페이가 삭제되었습니다.') })];
+    }
+
     return [
-      new SingleSectionBlock({ text: new PlainTextElement('더치 페이가 생성되었습니다.') }),
+      new SingleSectionBlock({
+        text: new PlainTextElement('더치 페이가 생성되었습니다.'),
+        accessory: new OverflowMenuElement({
+          actionId: DELETE_DUTCH_PAY_ACTION_ID,
+          options: [
+            new PlainTextOptionElement({
+              text: new PlainTextElement('삭제하기'),
+            }),
+          ],
+          confirm: new ConfirmationDialogElement({
+            title: new PlainTextElement('삭제하시겠습니까?'),
+            text: new PlainTextElement('삭제하면 다시 되돌릴 수 없습니다.'),
+            confirm: new PlainTextElement('예'),
+            deny: new PlainTextElement('아니요'),
+            style: 'danger',
+          }),
+        }),
+      }),
       new DividerBlock(),
       new SingleSectionBlock({ text: new MarkDownElement('*제목:*') }),
       new SingleSectionBlock({ text: new MarkDownElement(`> ${this.title}`) }),

@@ -11,16 +11,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DutchPayEntity } from '../modules/dutch-pay/entities/dutch-pay.entity';
 import { ParticipantEntity } from '../modules/dutch-pay/entities/participant.entity';
 import { ScheduleModule } from '@nestjs/schedule';
+import { DutchPayCreatedMessageModule } from './dutch-pay-created-message/dutch-pay-created-message.module';
 
 @Module({
   imports: [
     CustomConfigModule,
     CustomEventEmitterModule,
     DatabaseModule,
+    TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity]),
     ScheduleModule.forRoot(),
     DutchPayModalModule,
     DutchPayRequestMessageModule,
-    TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity]),
+    DutchPayCreatedMessageModule,
   ],
   controllers: [AppController],
   providers: [AppListener, AppService],

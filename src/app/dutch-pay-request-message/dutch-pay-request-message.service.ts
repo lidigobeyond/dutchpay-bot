@@ -18,7 +18,7 @@ export class DutchPayRequestMessageService {
   ) {}
 
   /**
-   * 더치 페이 요청 메시지에서 입금 완료 버튼이 눌렸을 때 발생하는 이벤트 처리 함수
+   * 입금 완료 이벤트 처리 함수
    * @param blockActionPayload
    */
   async handlePaidBack(blockActionPayload: BlockActionsPayload): Promise<void> {

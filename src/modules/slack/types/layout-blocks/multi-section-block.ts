@@ -1,12 +1,13 @@
 import { SectionBlock as Parent } from '@slack/web-api';
-import { PlainTextElement } from '../block-elements/plain-text-element';
-import { MarkDownElement } from '../block-elements/mark-down-element';
+import { PlainTextElement } from '../composition-objects/plain-text-element';
+import { MarkDownElement } from '../composition-objects/mark-down-element';
 import { ButtonElement } from '../block-elements/button-element';
+import { OverflowMenuElement } from '../block-elements/overflow-menu-element';
 
-export type MultiSectionBlockArgs = {
+export interface MultiSectionBlockArgs {
   fields: (PlainTextElement | MarkDownElement)[];
-  accessory?: ButtonElement;
-};
+  accessory?: ButtonElement | OverflowMenuElement;
+}
 
 /**
  * 참고 : https://api.slack.com/reference/block-kit/blocks?ref=bk#section
@@ -14,7 +15,7 @@ export type MultiSectionBlockArgs = {
 export class MultiSectionBlock implements Parent {
   type: 'section' = 'section';
   fields: (PlainTextElement | MarkDownElement)[];
-  accessory?: ButtonElement;
+  accessory?: ButtonElement | OverflowMenuElement;
 
   constructor(args: MultiSectionBlockArgs) {
     const { fields, accessory } = args;

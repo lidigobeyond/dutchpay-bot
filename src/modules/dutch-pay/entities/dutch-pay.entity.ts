@@ -54,6 +54,13 @@ export class DutchPayEntity {
   })
   isFinished: boolean;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+    comment: '삭제 여부',
+  })
+  isDeleted: boolean;
+
   @Index()
   @Column({
     type: 'varchar',

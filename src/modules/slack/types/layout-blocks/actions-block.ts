@@ -2,10 +2,10 @@ import { ActionsBlock as Parent } from '@slack/web-api';
 import { DatePickerElement } from '../block-elements/date-picker-element';
 import { ConversationSelectElement } from '../block-elements/conversation-select-element';
 
-export type ActionsBlockArgs = {
+export interface ActionsBlockArgs {
   id: string;
   elements: (DatePickerElement | ConversationSelectElement)[];
-};
+}
 
 /**
  * A block that is used to hold interactive elements.
