@@ -199,10 +199,11 @@ export class AppService {
    */
   sendParticipantPaidBackMessage(participant: ParticipantEntity) {
     const { userId: participantId, dutchPay } = participant;
-    const { createUserId } = dutchPay;
+    const { channelId, ts } = dutchPay;
 
-    return this.slackService.postMessage({
-      channelId: createUserId,
+    return this.slackService.replyMessage({
+      channelId,
+      ts,
       text: `<@${participantId}> 님께서 입금 완료하셨다고 합니다. 입금 내역을 확인해보세요.`,
     });
   }
@@ -255,6 +256,9 @@ export class AppService {
     // 입금 완료하지 않은 더치 페이 참여자 목록 조회
     const participants = await this.participantRepository.findBy({
       isPayBack: false,
+      dutchPay: {
+        isDeleted: false,
+      },
     });
 
     this.logger.log(`리마인드 메시지 발송 대상자 = ${participants.length}명`);
@@ -266,8 +270,7 @@ export class AppService {
       await this.slackService.replyMessage({
         channelId: participantId,
         ts,
-        text: `(띵동) 입금 완료하셨나요? 입금 완료하셨다면 '입금 완료' 버튼을 눌러주세요.`,
-        broadcast: true,
+        text: `(띵동) <@${participantId}> 님, 입금 완료하셨나요? 입금 완료하셨다면 '입금 완료' 버튼을 눌러주세요.`,
       });
     }
 

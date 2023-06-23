@@ -72,7 +72,7 @@ export class SlackService {
    * 댓글을 답니다.
    * 참고 : https://api.slack.com/methods/chat.postMessage#threads
    */
-  replyMessage(args: { channelId: string; ts: string; message?: IMessage; text: string; broadcast: boolean }): Promise<ChatPostMessageResponse> {
+  replyMessage(args: { channelId: string; ts: string; message?: IMessage; text: string; broadcast?: boolean }): Promise<ChatPostMessageResponse> {
     const { channelId, ts, message, text, broadcast } = args;
 
     return this.webClient.chat.postMessage({
@@ -80,7 +80,7 @@ export class SlackService {
       thread_ts: ts,
       blocks: message?.toBlocks(),
       text,
-      reply_broadcast: broadcast,
+      reply_broadcast: broadcast ?? false,
     });
   }
 }
