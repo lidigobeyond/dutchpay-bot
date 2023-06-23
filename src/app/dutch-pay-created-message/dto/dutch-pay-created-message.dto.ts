@@ -26,6 +26,8 @@ export class DutchPayCreatedMessage implements IMessage {
   private readonly participants: { userId: string; price: string; isPayBack: boolean }[];
   private readonly isDeleted: boolean;
 
+  private readonly isFinished: boolean;
+
   constructor(args: DutchPayCreatedMessageArgs) {
     const { title, date, description, participants, isDeleted } = args;
 
@@ -34,6 +36,8 @@ export class DutchPayCreatedMessage implements IMessage {
     this.description = description;
     this.participants = participants;
     this.isDeleted = isDeleted;
+
+    this.isFinished = participants.every((participant) => participant.isPayBack);
   }
 
   toBlocks(): (KnownBlock | Block)[] {
@@ -44,21 +48,23 @@ export class DutchPayCreatedMessage implements IMessage {
     return [
       new SingleSectionBlock({
         text: new PlainTextElement('더치 페이가 생성되었습니다.'),
-        accessory: new OverflowMenuElement({
-          actionId: DELETE_DUTCH_PAY_ACTION_ID,
-          options: [
-            new PlainTextOptionElement({
-              text: new PlainTextElement('삭제하기'),
+        accessory: this.isFinished
+          ? undefined
+          : new OverflowMenuElement({
+              actionId: DELETE_DUTCH_PAY_ACTION_ID,
+              options: [
+                new PlainTextOptionElement({
+                  text: new PlainTextElement('삭제하기'),
+                }),
+              ],
+              confirm: new ConfirmationDialogElement({
+                title: new PlainTextElement('삭제하시겠습니까?'),
+                text: new PlainTextElement('삭제하면 다시 되돌릴 수 없습니다.'),
+                confirm: new PlainTextElement('예'),
+                deny: new PlainTextElement('아니요'),
+                style: 'danger',
+              }),
             }),
-          ],
-          confirm: new ConfirmationDialogElement({
-            title: new PlainTextElement('삭제하시겠습니까?'),
-            text: new PlainTextElement('삭제하면 다시 되돌릴 수 없습니다.'),
-            confirm: new PlainTextElement('예'),
-            deny: new PlainTextElement('아니요'),
-            style: 'danger',
-          }),
-        }),
       }),
       new DividerBlock(),
       new SingleSectionBlock({ text: new MarkDownElement('*제목:*') }),

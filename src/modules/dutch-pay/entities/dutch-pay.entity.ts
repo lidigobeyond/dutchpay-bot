@@ -50,13 +50,6 @@ export class DutchPayEntity {
   @Column({
     type: 'boolean',
     default: false,
-    comment: '완료 여부',
-  })
-  isFinished: boolean;
-
-  @Column({
-    type: 'boolean',
-    default: false,
     comment: '삭제 여부',
   })
   isDeleted: boolean;

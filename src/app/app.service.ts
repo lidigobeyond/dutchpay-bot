@@ -146,6 +146,13 @@ export class AppService {
     await this.updateDutchPayCreatedMessage(participant.dutchPay);
     // 더치 페이를 생성한 유저에게 입금 완료 안내 메시지 발송
     await this.sendParticipantPaidBackMessage(participant);
+
+    // 모든 더치 페이 참여자가 입금 완료한 경우
+    const everyParticipantsPaidBack = participant.dutchPay.participants.every((participant) => participant.isPayBack);
+    if (everyParticipantsPaidBack) {
+      // 더치 페이를 생성한 유저에게 더치 페이 완료 메시지 발송
+      await this.sendDutchPayFinishedMessage(participant.dutchPay);
+    }
   }
 
   /**
@@ -205,6 +212,20 @@ export class AppService {
       channelId,
       ts,
       text: `<@${participantId}> 님께서 입금 완료하셨다고 합니다. 입금 내역을 확인해보세요.`,
+    });
+  }
+
+  /**
+   * 더치 페이를 생성한 유저에게 더치 페이 완료 메시지를 보냅니다.
+   * @param dutchPay
+   */
+  sendDutchPayFinishedMessage(dutchPay: DutchPayEntity) {
+    const { channelId, ts, createUserId } = dutchPay;
+
+    return this.slackService.replyMessage({
+      channelId,
+      ts,
+      text: `<@${createUserId}> 님, 모든 참여자들이 입금 완료하셨습니다. 입금 내역을 확인해보세요.`,
     });
   }
 
