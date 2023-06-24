@@ -4,6 +4,7 @@ import { SLACK_CONFIG } from './slack.constant';
 import { WebAPICallResult } from '@slack/web-api/dist/WebClient';
 import { SlackConfig } from './slack.module';
 import { IModal } from './interfaces/modal.interface';
+import { IHome } from './interfaces/home.interface';
 import { IMessage } from './interfaces/message.interface';
 import { ChatPostMessageResponse } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 import { ChatUpdateResponse } from '@slack/web-api/dist/response/ChatUpdateResponse';
@@ -29,13 +30,23 @@ export class SlackService {
   }
 
   /**
-   * 사용자가 보고 있는 모달을 업데이트합니다.
+   * 사용자가 보고 있는 모달을 변경합니다.
    * 참고 : https://api.slack.com/methods/views.update
    * @param viewId
    * @param modal
    */
   updateModal(viewId: string, modal: IModal): Promise<WebAPICallResult> {
     return this.webClient.views.update({ view_id: viewId, view: modal.toModalView() });
+  }
+
+  /**
+   * 특정 사용자와 상호작용할 Home 탭을 생성(또는 수정)합니다.
+   * 참고 : https://api.slack.com/methods/views.publish
+   * @param userId
+   * @param home
+   */
+  publishHome(userId: string, home: IHome): Promise<WebAPICallResult> {
+    return this.webClient.views.publish({ user_id: userId, view: home.toHomeView() });
   }
 
   /**

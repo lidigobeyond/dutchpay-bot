@@ -12,6 +12,7 @@ import { DutchPayEntity } from '../modules/dutch-pay/entities/dutch-pay.entity';
 import { ParticipantEntity } from '../modules/dutch-pay/entities/participant.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DutchPayCreatedMessageModule } from './dutch-pay-created-message/dutch-pay-created-message.module';
+import { DutchPayHomeTabModule } from './dutch-pay-home-tab/dutch-pay-home-tab.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DutchPayCreatedMessageModule } from './dutch-pay-created-message/dutch-
     DutchPayModalModule,
     DutchPayRequestMessageModule,
     DutchPayCreatedMessageModule,
+    DutchPayHomeTabModule,
   ],
   controllers: [AppController],
   providers: [AppListener, AppService],

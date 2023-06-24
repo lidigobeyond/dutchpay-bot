@@ -6,21 +6,19 @@ import { ViewSubmissionPayload } from '../types/payloads/view-submission-payload
 
 export class ParseInteractionPayloadPipe implements PipeTransform<string, InteractionPayload> {
   transform(value: any) {
-    if (typeof value !== 'string') {
+    if (typeof value == 'string') {
+      value = JSON.parse(value);
+    }
+
+    if (!value.hasOwnProperty('type') || typeof value.type !== 'string') {
       return value;
     }
 
-    const obj = JSON.parse(value);
-
-    if (!obj.hasOwnProperty('type') || typeof obj.type !== 'string') {
-      return value;
-    }
-
-    switch (obj.type) {
+    switch (value.type) {
       case InteractionType.BLOCK_ACTIONS:
-        return plainToInstance(BlockActionsPayload, obj);
+        return plainToInstance(BlockActionsPayload, value);
       case InteractionType.VIEW_SUBMISSION:
-        return plainToInstance(ViewSubmissionPayload, obj);
+        return plainToInstance(ViewSubmissionPayload, value);
       default:
         return;
     }

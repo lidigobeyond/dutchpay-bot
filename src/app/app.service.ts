@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DutchPayEntity } from '../modules/dutch-pay/entities/dutch-pay.entity';
 import { Repository } from 'typeorm';
 import { ParticipantEntity } from '../modules/dutch-pay/entities/participant.entity';
+import { DutchPayHomeTab } from './dutch-pay-home-tab/dto/dutch-pay-home-tab.dto';
 
 @Injectable()
 export class AppService {
@@ -29,6 +30,16 @@ export class AppService {
     const dutchPayModal = new DutchPayModal({ title });
 
     await this.slackService.openModal(triggerId, dutchPayModal);
+  }
+
+  /**
+   * 사용자에게 새로운 Home 탭을 엽니다.
+   * @param userId
+   */
+  async openNewHomeTab(userId: string): Promise<void> {
+    const dutchPayHomeTab = new DutchPayHomeTab();
+
+    await this.slackService.publishHome(userId, dutchPayHomeTab);
   }
 
   /**
