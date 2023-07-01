@@ -9,27 +9,30 @@ import { ChatUpdateResponse } from '@slack/web-api/dist/response/ChatUpdateRespo
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkspaceEntity } from '../../database/entities/workspace.entity';
+import { CustomConfigService } from '../../config/custom-config.service';
+import { OauthV2AccessResponse } from '@slack/web-api/dist/response/OauthV2AccessResponse';
 
 @Injectable()
 export class SlackService {
   private readonly webClient = new WebClient();
 
-  constructor(@InjectRepository(WorkspaceEntity) private readonly workspaceRepository: Repository<WorkspaceEntity>) {}
+  constructor(
+    private readonly customConfigService: CustomConfigService,
+    @InjectRepository(WorkspaceEntity) private readonly workspaceRepository: Repository<WorkspaceEntity>,
+  ) {}
 
   /**
-   *
-   * @param teamId
+   * 참고 : https://api.slack.com/methods/oauth.v2.access
+   * @param code
    */
-  async getAccessTokenByTeamId(teamId: string): Promise<string | null> {
-    const workspace = await this.workspaceRepository.findOneBy({
-      id: teamId,
+  access(code: string): Promise<OauthV2AccessResponse> {
+    const { clientId, clientSecret } = this.customConfigService.slackConfig;
+
+    return this.webClient.oauth.v2.access({
+      client_id: clientId,
+      client_secret: clientSecret,
+      code,
     });
-
-    if (!workspace) {
-      return null;
-    }
-
-    return workspace.token;
   }
 
   /**
@@ -161,5 +164,21 @@ export class SlackService {
       text,
       reply_broadcast: broadcast ?? false,
     });
+  }
+
+  /**
+   *
+   * @param teamId
+   */
+  private async getAccessTokenByTeamId(teamId: string): Promise<string | null> {
+    const workspace = await this.workspaceRepository.findOneBy({
+      id: teamId,
+    });
+
+    if (!workspace) {
+      return null;
+    }
+
+    return workspace.token;
   }
 }

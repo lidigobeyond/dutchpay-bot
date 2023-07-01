@@ -50,14 +50,4 @@ export class WorkspaceEntity {
     length: 255,
   })
   appId: string;
-
-  @Column({
-    type: 'json',
-  })
-  enterprise: Record<string, any>;
-
-  @Column({
-    type: 'json',
-  })
-  authedUser: Record<string, any>;
 }

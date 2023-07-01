@@ -3,10 +3,15 @@ import { Expose, plainToInstance } from 'class-transformer';
 import { IsNotEmpty, IsString, validateSync } from 'class-validator';
 
 export class SlackConfig {
-  @Expose({ name: 'SLACK_BOT_USER_OAUTH_TOKEN' })
+  @Expose({ name: 'SLACK_BOT_CLIENT_ID' })
   @IsNotEmpty()
   @IsString()
-  token: string;
+  clientId: string;
+
+  @Expose({ name: 'SLACK_BOT_CLIENT_SECRET' })
+  @IsNotEmpty()
+  @IsString()
+  clientSecret: string;
 }
 
 export const slackConfig = registerAs('slack', () => {

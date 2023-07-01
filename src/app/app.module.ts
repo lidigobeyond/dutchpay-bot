@@ -14,6 +14,7 @@ import { ParticipantEntity } from '../database/entities/participant.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DutchPayCreatedMessageModule } from './dutch-pay-created-message/dutch-pay-created-message.module';
 import { DutchPayHomeTabModule } from './dutch-pay-home-tab/dutch-pay-home-tab.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,11 +23,12 @@ import { DutchPayHomeTabModule } from './dutch-pay-home-tab/dutch-pay-home-tab.m
     SlackModule,
     DatabaseModule,
     TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity]),
-    ScheduleModule.forRoot(),
+    AuthModule,
+    DutchPayHomeTabModule,
     DutchPayModalModule,
     DutchPayRequestMessageModule,
     DutchPayCreatedMessageModule,
-    DutchPayHomeTabModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppListener, AppService],
