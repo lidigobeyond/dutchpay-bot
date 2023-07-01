@@ -24,7 +24,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           username,
           password,
           database,
-          entities: [path.join(__dirname, '../modules/**/*.entity{.ts,.js}')],
+          entities: [path.join(__dirname, './entities/*.entity{.ts,.js}')],
           namingStrategy: new SnakeNamingStrategy(),
           autoLoadEntities: true,
           synchronize: !isProd,

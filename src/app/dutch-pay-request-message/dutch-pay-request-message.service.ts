@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ParticipantEntity } from '../../modules/dutch-pay/entities/participant.entity';
+import { ParticipantEntity } from '../../database/entities/participant.entity';
 import { PARTICIPANT_PAID_BACK_EVENT } from '../app.constant';
 
 @Injectable()

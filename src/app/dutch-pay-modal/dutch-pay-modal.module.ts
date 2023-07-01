@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { SlackModule } from '../../modules/slack/slack.module';
 import { DutchPayModalListener } from './dutch-pay-modal.listener';
 import { DutchPayModalService } from './dutch-pay-modal.service';
-import { DutchPayModule } from '../../modules/dutch-pay/dutch-pay.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DutchPayEntity } from '../../database/entities/dutch-pay.entity';
+import { ParticipantEntity } from '../../database/entities/participant.entity';
 
 @Module({
-  imports: [SlackModule, DutchPayModule],
+  imports: [SlackModule, TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity])],
   providers: [DutchPayModalListener, DutchPayModalService],
 })
 export class DutchPayModalModule {}

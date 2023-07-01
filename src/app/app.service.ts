@@ -5,9 +5,9 @@ import { DutchPayCreatedMessage } from './dutch-pay-created-message/dto/dutch-pa
 import dayjs from 'dayjs';
 import { DutchPayRequestMessage } from './dutch-pay-request-message/dto/dutch-pay-request-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DutchPayEntity } from '../modules/dutch-pay/entities/dutch-pay.entity';
+import { DutchPayEntity } from '../database/entities/dutch-pay.entity';
 import { Repository } from 'typeorm';
-import { ParticipantEntity } from '../modules/dutch-pay/entities/participant.entity';
+import { ParticipantEntity } from '../database/entities/participant.entity';
 import { DutchPayHomeTab } from './dutch-pay-home-tab/dto/dutch-pay-home-tab.dto';
 
 @Injectable()

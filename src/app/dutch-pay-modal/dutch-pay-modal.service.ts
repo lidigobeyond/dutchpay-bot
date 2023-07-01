@@ -5,8 +5,11 @@ import { DutchPayModal } from './dto/dutch-pay-modal.dto';
 import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
 import { ViewSubmissionPayload } from '../../modules/slack/types/payloads/view-submission-payload';
 import dayjs from 'dayjs';
-import { DutchPayService } from '../../modules/dutch-pay/dutch-pay.service';
 import { DUTCH_PAY_CREATED_EVENT } from '../app.constant';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DutchPayEntity } from '../../database/entities/dutch-pay.entity';
+import { Repository } from 'typeorm';
+import { ParticipantEntity } from '../../database/entities/participant.entity';
 
 @Injectable()
 export class DutchPayModalService {
@@ -15,7 +18,8 @@ export class DutchPayModalService {
   constructor(
     private readonly slackService: SlackService,
     private readonly eventEmitter: EventEmitter2,
-    private readonly dutchPayService: DutchPayService,
+    @InjectRepository(DutchPayEntity) private readonly dutchPayRepository: Repository<DutchPayEntity>,
+    @InjectRepository(ParticipantEntity) private readonly participantRepository: Repository<ParticipantEntity>,
   ) {}
 
   /**
@@ -54,19 +58,23 @@ export class DutchPayModalService {
     const participants = dutchPayModal.participants as { id: string; price: string }[];
 
     // 더치 페이 정보 저장
-    const dutchPayEntity = await this.dutchPayService.create({
-      title: title,
+    const participantEntities = participants.map((participant) => {
+      const { id: userId, price } = participant;
+      return this.participantRepository.create({
+        userId,
+        price,
+      });
+    });
+
+    const dutchPayEntity = this.dutchPayRepository.create({
+      title,
       date: date.toDate(),
       description,
-      participants: participants.map((participant) => {
-        const { id, price } = participant;
-        return {
-          userId: id,
-          price: price,
-        };
-      }),
+      participants: participantEntities,
       createUserId: user.id,
     });
+
+    await this.dutchPayRepository.save(dutchPayEntity);
 
     // 더치 페이 생성 완료 이벤트 발행
     this.eventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchPayEntity.id);

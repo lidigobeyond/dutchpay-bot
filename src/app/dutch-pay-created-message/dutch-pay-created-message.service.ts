@@ -3,7 +3,7 @@ import { SlackService } from '../../modules/slack/slack.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DutchPayEntity } from '../../modules/dutch-pay/entities/dutch-pay.entity';
+import { DutchPayEntity } from '../../database/entities/dutch-pay.entity';
 import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
 import { DUTCH_PAY_DELETED_EVENT } from '../app.constant';
 
