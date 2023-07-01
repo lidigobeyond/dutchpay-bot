@@ -1,62 +1,107 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { WebClient } from '@slack/web-api';
-import { SLACK_CONFIG } from './slack.constant';
 import { WebAPICallResult } from '@slack/web-api/dist/WebClient';
-import { SlackConfig } from './slack.module';
 import { IModal } from './interfaces/modal.interface';
 import { IHome } from './interfaces/home.interface';
 import { IMessage } from './interfaces/message.interface';
 import { ChatPostMessageResponse } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 import { ChatUpdateResponse } from '@slack/web-api/dist/response/ChatUpdateResponse';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { WorkspaceEntity } from '../../database/entities/workspace.entity';
 
 @Injectable()
 export class SlackService {
-  private readonly webClient: WebClient;
+  private readonly webClient = new WebClient();
 
-  constructor(@Inject(SLACK_CONFIG) private readonly config: SlackConfig) {
-    const { token } = config;
+  constructor(@InjectRepository(WorkspaceEntity) private readonly workspaceRepository: Repository<WorkspaceEntity>) {}
 
-    this.webClient = new WebClient(token);
+  /**
+   *
+   * @param teamId
+   */
+  async getAccessTokenByTeamId(teamId: string): Promise<string | null> {
+    const workspace = await this.workspaceRepository.findOneBy({
+      id: teamId,
+    });
+
+    if (!workspace) {
+      return null;
+    }
+
+    return workspace.token;
   }
 
   /**
    * 사용자에게 모달을 엽니다.
    * 참고 : https://api.slack.com/methods/views.open
-   * @param triggerId
-   * @param modal
+   * @param args
    */
-  openModal(triggerId: string, modal: IModal): Promise<WebAPICallResult> {
-    return this.webClient.views.open({ trigger_id: triggerId, view: modal.toModalView() });
+  async openModal(args: { teamId: string; triggerId: string; modal: IModal }): Promise<WebAPICallResult> {
+    const { teamId, triggerId, modal } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
+
+    return this.webClient.views.open({ token, trigger_id: triggerId, view: modal.toModalView() });
   }
 
   /**
    * 사용자가 보고 있는 모달을 변경합니다.
    * 참고 : https://api.slack.com/methods/views.update
-   * @param viewId
-   * @param modal
+   * @param args
    */
-  updateModal(viewId: string, modal: IModal): Promise<WebAPICallResult> {
-    return this.webClient.views.update({ view_id: viewId, view: modal.toModalView() });
+  async updateModal(args: { teamId: string; viewId: string; modal: IModal }): Promise<WebAPICallResult> {
+    const { teamId, viewId, modal } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
+
+    return this.webClient.views.update({ token, view_id: viewId, view: modal.toModalView() });
   }
 
   /**
    * 특정 사용자와 상호작용할 Home 탭을 생성(또는 수정)합니다.
    * 참고 : https://api.slack.com/methods/views.publish
-   * @param userId
-   * @param home
+   * @param args
    */
-  publishHome(userId: string, home: IHome): Promise<WebAPICallResult> {
-    return this.webClient.views.publish({ user_id: userId, view: home.toHomeView() });
+  async publishHome(args: { teamId: string; userId: string; home: IHome }): Promise<WebAPICallResult> {
+    const { teamId, userId, home } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
+
+    return this.webClient.views.publish({ token, user_id: userId, view: home.toHomeView() });
   }
 
   /**
    * 채널(또는 DM)에 구조적인 메시지를 게시합니다.
    * 참고 : https://api.slack.com/methods/chat.postMessage
    */
-  postMessage(args: { channelId: string; message?: IMessage; text: string }): Promise<ChatPostMessageResponse> {
-    const { channelId, message, text } = args;
+  async postMessage(args: { teamId: string; channelId: string; message?: IMessage; text: string }): Promise<ChatPostMessageResponse> {
+    const { teamId, channelId, message, text } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
 
     return this.webClient.chat.postMessage({
+      token,
       channel: channelId,
       blocks: message?.toBlocks(),
       text,
@@ -68,10 +113,18 @@ export class SlackService {
    * 참고 : https://api.slack.com/methods/chat.update
    * @param args
    */
-  updateMessage(args: { channelId: string; ts: string; message?: IMessage; text: string }): Promise<ChatUpdateResponse> {
-    const { channelId, ts, message, text } = args;
+  async updateMessage(args: { teamId: string; channelId: string; ts: string; message?: IMessage; text: string }): Promise<ChatUpdateResponse> {
+    const { teamId, channelId, ts, message, text } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
 
     return this.webClient.chat.update({
+      token,
       channel: channelId,
       ts,
       blocks: message?.toBlocks(),
@@ -83,10 +136,25 @@ export class SlackService {
    * 댓글을 답니다.
    * 참고 : https://api.slack.com/methods/chat.postMessage#threads
    */
-  replyMessage(args: { channelId: string; ts: string; message?: IMessage; text: string; broadcast?: boolean }): Promise<ChatPostMessageResponse> {
-    const { channelId, ts, message, text, broadcast } = args;
+  async replyMessage(args: {
+    teamId: string;
+    channelId: string;
+    ts: string;
+    message?: IMessage;
+    text: string;
+    broadcast?: boolean;
+  }): Promise<ChatPostMessageResponse> {
+    const { teamId, channelId, ts, message, text, broadcast } = args;
+
+    const token = await this.getAccessTokenByTeamId(teamId);
+
+    if (!token) {
+      // TODO 예외 처리
+      throw new Error();
+    }
 
     return this.webClient.chat.postMessage({
+      token,
       channel: channelId,
       thread_ts: ts,
       blocks: message?.toBlocks(),

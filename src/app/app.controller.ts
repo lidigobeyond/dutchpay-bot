@@ -19,9 +19,9 @@ export class AppController {
 
   @Post('slash_command_was_invoked')
   async handleSlashCommand(@Body(ClassTransformPipe) payload: SlashCommandPayload): Promise<void> {
-    const { triggerId, text: title } = payload;
+    const { teamId, triggerId, text: title } = payload;
 
-    return this.appService.openNewDutchPayModal({ triggerId, title });
+    return this.appService.openNewDutchPayModal({ teamId, triggerId, title });
   }
 
   @Post('interaction_occurred')
@@ -77,8 +77,9 @@ export class AppController {
    * @param payload
    */
   handleAppHomeOpenedEvent(payload: EventPayload) {
-    const { user } = payload.event;
+    const { teamId, event } = payload;
+    const { user } = event;
 
-    return this.appService.openNewHomeTab(user);
+    return this.appService.openNewHomeTab({ teamId, userId: user });
   }
 }

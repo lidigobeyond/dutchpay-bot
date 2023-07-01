@@ -24,22 +24,28 @@ export class AppService {
    * 사용자에게 새로운 더치 페이 생성 모달을 엽니다.
    * @param args
    */
-  async openNewDutchPayModal(args: { triggerId: string; title?: string }): Promise<void> {
-    const { triggerId, title } = args;
+  async openNewDutchPayModal(args: { teamId: string; triggerId: string; title?: string }): Promise<void> {
+    const { teamId, triggerId, title } = args;
 
     const dutchPayModal = new DutchPayModal({ title });
 
-    await this.slackService.openModal(triggerId, dutchPayModal);
+    await this.slackService.openModal({
+      teamId,
+      triggerId,
+      modal: dutchPayModal,
+    });
   }
 
   /**
    * 사용자에게 새로운 Home 탭을 엽니다.
-   * @param userId
+   * @param args
    */
-  async openNewHomeTab(userId: string): Promise<void> {
-    const dutchPayHomeTab = new DutchPayHomeTab();
+  async openNewHomeTab(args: { teamId: string; userId: string }): Promise<void> {
+    const { teamId, userId } = args;
 
-    await this.slackService.publishHome(userId, dutchPayHomeTab);
+    const dutchPayHome = new DutchPayHomeTab();
+
+    await this.slackService.publishHome({ teamId, userId, home: dutchPayHome });
   }
 
   /**
@@ -95,11 +101,12 @@ export class AppService {
    * @param participant
    */
   sendDutchPayRequestMessage(participant: ParticipantEntity) {
-    const { userId: participantId, price, isPayBack, dutchPay } = participant;
+    const { teamId, userId: participantId, price, isPayBack, dutchPay } = participant;
     const { createUserId, title, date, description, isDeleted: isDutchPayDeleted } = dutchPay;
 
     // 더치 페이 요청 메시지 발송
     return this.slackService.postMessage({
+      teamId,
       channelId: participantId,
       text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
       message: new DutchPayRequestMessage({
@@ -119,10 +126,11 @@ export class AppService {
    * @param dutchPay
    */
   sendDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
-    const { createUserId, title, date, description, participants, isDeleted } = dutchPay;
+    const { createUserTeamId, createUserId, title, date, description, participants, isDeleted } = dutchPay;
 
     // 더치 페이 생성 완료 메시지 발송
     return this.slackService.postMessage({
+      teamId: createUserTeamId,
       channelId: createUserId,
       text: '더치 페이가 생성되었습니다.',
       message: new DutchPayCreatedMessage({
@@ -171,10 +179,11 @@ export class AppService {
    * @param participant
    */
   updateDutchPayRequestMessage(participant: ParticipantEntity) {
-    const { channelId, ts, price, isPayBack, dutchPay } = participant;
+    const { teamId, channelId, ts, price, isPayBack, dutchPay } = participant;
     const { createUserId, title, date, description, isDeleted: isDutchPayDeleted } = dutchPay;
 
     return this.slackService.updateMessage({
+      teamId,
       channelId,
       ts,
       text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
@@ -195,9 +204,10 @@ export class AppService {
    * @param dutchPay
    */
   updateDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
-    const { channelId, ts, title, date, description, participants, isDeleted } = dutchPay;
+    const { createUserTeamId, channelId, ts, title, date, description, participants, isDeleted } = dutchPay;
 
     return this.slackService.updateMessage({
+      teamId: createUserTeamId,
       channelId,
       ts,
       text: '더치 페이가 생성되었습니다.',
@@ -217,9 +227,10 @@ export class AppService {
    */
   sendParticipantPaidBackMessage(participant: ParticipantEntity) {
     const { userId: participantId, dutchPay } = participant;
-    const { channelId, ts } = dutchPay;
+    const { createUserTeamId, channelId, ts } = dutchPay;
 
     return this.slackService.replyMessage({
+      teamId: createUserTeamId,
       channelId,
       ts,
       text: `<@${participantId}> 님께서 입금 완료하셨다고 합니다. 입금 내역을 확인해보세요.`,
@@ -231,9 +242,10 @@ export class AppService {
    * @param dutchPay
    */
   sendDutchPayFinishedMessage(dutchPay: DutchPayEntity) {
-    const { channelId, ts, createUserId } = dutchPay;
+    const { createUserTeamId, channelId, ts, createUserId } = dutchPay;
 
     return this.slackService.replyMessage({
+      teamId: createUserTeamId,
       channelId,
       ts,
       text: `<@${createUserId}> 님, 모든 참여자들이 입금 완료하셨습니다. 입금 내역을 확인해보세요.`,
@@ -297,9 +309,10 @@ export class AppService {
 
     // 리마인드 메시지 발송
     for (const participant of participants) {
-      const { userId: participantId, ts } = participant;
+      const { teamId, userId: participantId, ts } = participant;
 
       await this.slackService.replyMessage({
+        teamId,
         channelId: participantId,
         ts,
         text: `(띵동) <@${participantId}> 님, 입금 완료하셨나요? 입금 완료하셨다면 '입금 완료' 버튼을 눌러주세요.`,

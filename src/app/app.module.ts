@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CustomConfigModule } from '../config/custom-config.module';
 import { CustomEventEmitterModule } from '../event-emitter/event-emitter.module';
+import { SlackModule } from '../modules/slack/slack.module';
 import { DatabaseModule } from '../database/database.module';
 import { DutchPayModalModule } from './dutch-pay-modal/dutch-pay-modal.module';
 import { AppController } from './app.controller';
@@ -18,6 +19,7 @@ import { DutchPayHomeTabModule } from './dutch-pay-home-tab/dutch-pay-home-tab.m
   imports: [
     CustomConfigModule,
     CustomEventEmitterModule,
+    SlackModule,
     DatabaseModule,
     TypeOrmModule.forFeature([DutchPayEntity, ParticipantEntity]),
     ScheduleModule.forRoot(),

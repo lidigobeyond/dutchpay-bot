@@ -14,10 +14,10 @@ export class DutchPayHomeTabService {
    * @param blockActionPayload
    */
   async handleCreateDutchPay(blockActionPayload: BlockActionsPayload): Promise<void> {
-    const { triggerId } = blockActionPayload;
+    const { team, triggerId } = blockActionPayload;
 
     const dutchPayModal = new DutchPayModal({});
 
-    await this.slackService.openModal(triggerId, dutchPayModal);
+    await this.slackService.openModal({ teamId: team.id, triggerId, modal: dutchPayModal });
   }
 }

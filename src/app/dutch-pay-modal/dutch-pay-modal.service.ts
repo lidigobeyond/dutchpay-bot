@@ -27,7 +27,7 @@ export class DutchPayModalService {
    * @param blockActionsPayload
    */
   async handleUserSelected(blockActionsPayload: BlockActionsPayload): Promise<void> {
-    const { view, actions } = blockActionsPayload;
+    const { team, view, actions } = blockActionsPayload;
 
     // 모달 상태 정보 추출
     const dutchPayModal = DutchPayModal.fromViewState(view!.state);
@@ -39,7 +39,11 @@ export class DutchPayModalService {
     dutchPayModal.addParticipant({ id: selectedUserId });
 
     // 모달 업데이트
-    await this.slackService.updateModal(view!.id, dutchPayModal);
+    await this.slackService.updateModal({
+      teamId: team.id,
+      viewId: view!.id,
+      modal: dutchPayModal,
+    });
   }
 
   /**
