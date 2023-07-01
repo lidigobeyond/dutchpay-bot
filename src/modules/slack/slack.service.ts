@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { WebClient } from '@slack/web-api';
-import { WebAPICallResult } from '@slack/web-api/dist/WebClient';
 import { IModal } from './interfaces/modal.interface';
 import { IHome } from './interfaces/home.interface';
 import { IMessage } from './interfaces/message.interface';
@@ -11,6 +10,9 @@ import { Repository } from 'typeorm';
 import { WorkspaceEntity } from '../../database/entities/workspace.entity';
 import { CustomConfigService } from '../../config/custom-config.service';
 import { OauthV2AccessResponse } from '@slack/web-api/dist/response/OauthV2AccessResponse';
+import { ViewsOpenResponse } from '@slack/web-api/dist/response/ViewsOpenResponse';
+import { ViewsUpdateResponse } from '@slack/web-api/dist/response/ViewsUpdateResponse';
+import { ViewsPublishResponse } from '@slack/web-api/dist/response/ViewsPublishResponse';
 
 @Injectable()
 export class SlackService {
@@ -40,7 +42,7 @@ export class SlackService {
    * 참고 : https://api.slack.com/methods/views.open
    * @param args
    */
-  async openModal(args: { teamId: string; triggerId: string; modal: IModal }): Promise<WebAPICallResult> {
+  async openModal(args: { teamId: string; triggerId: string; modal: IModal }): Promise<ViewsOpenResponse> {
     const { teamId, triggerId, modal } = args;
 
     const token = await this.getAccessTokenByTeamId(teamId);
@@ -58,7 +60,7 @@ export class SlackService {
    * 참고 : https://api.slack.com/methods/views.update
    * @param args
    */
-  async updateModal(args: { teamId: string; viewId: string; modal: IModal }): Promise<WebAPICallResult> {
+  async updateModal(args: { teamId: string; viewId: string; modal: IModal }): Promise<ViewsUpdateResponse> {
     const { teamId, viewId, modal } = args;
 
     const token = await this.getAccessTokenByTeamId(teamId);
@@ -76,7 +78,7 @@ export class SlackService {
    * 참고 : https://api.slack.com/methods/views.publish
    * @param args
    */
-  async publishHome(args: { teamId: string; userId: string; home: IHome }): Promise<WebAPICallResult> {
+  async publishHome(args: { teamId: string; userId: string; home: IHome }): Promise<ViewsPublishResponse> {
     const { teamId, userId, home } = args;
 
     const token = await this.getAccessTokenByTeamId(teamId);
