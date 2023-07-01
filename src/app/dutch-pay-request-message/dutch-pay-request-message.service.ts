@@ -22,10 +22,11 @@ export class DutchPayRequestMessageService {
    * @param blockActionPayload
    */
   async handlePaidBack(blockActionPayload: BlockActionsPayload): Promise<void> {
-    const { user, message } = blockActionPayload;
+    const { team, user, message } = blockActionPayload;
 
     // 참여자 정보 조회
     const participant = await this.participantRepository.findOneBy({
+      teamId: team.id,
       userId: user.id,
       ts: message!.ts,
     });

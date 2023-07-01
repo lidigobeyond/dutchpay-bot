@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ParticipantEntity } from './participant.entity';
 
+@Index(['createUserTeamId', 'createUserId'])
 @Entity()
 export class DutchPayEntity {
   @PrimaryGeneratedColumn()
@@ -54,7 +55,13 @@ export class DutchPayEntity {
   })
   isDeleted: boolean;
 
-  @Index()
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: '생성한 유저 속한 팀(=워크스페이스) ID',
+  })
+  createUserTeamId: string;
+
   @Column({
     type: 'varchar',
     length: 255,

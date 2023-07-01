@@ -48,7 +48,7 @@ export class SlashCommandPayload {
    * The ID of the workspace where the user are joined
    */
   @Expose({ name: 'team_id' })
-  workspaceId: string;
+  teamId: string;
 
   /**
    * The ID of the channel where the user triggered the command

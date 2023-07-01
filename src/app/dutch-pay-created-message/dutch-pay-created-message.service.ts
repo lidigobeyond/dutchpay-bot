@@ -22,10 +22,11 @@ export class DutchPayCreatedMessageService {
    * @param blockActionPayload
    */
   async handleDeleteDutchPay(blockActionPayload: BlockActionsPayload): Promise<void> {
-    const { user, message } = blockActionPayload;
+    const { team, user, message } = blockActionPayload;
 
     // 더치 페이 정보 조회
     const dutchPay = await this.dutchPayEntityRepository.findOneBy({
+      createUserTeamId: team.id,
       createUserId: user.id,
       ts: message!.ts,
     });

@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { DutchPayEntity } from './dutch-pay.entity';
 
+@Index(['teamId', 'userId'])
 @Entity()
 export class ParticipantEntity {
   @PrimaryGeneratedColumn()
@@ -21,6 +22,13 @@ export class ParticipantEntity {
     comment: '슬랙 메시지 타임스탬프\n' + '슬랙 메시지를 수정하거나 삭제할 때 필요함.',
   })
   ts: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    comment: '참여자 유저가 속한 팀(=워크스페이스) ID',
+  })
+  teamId: string;
 
   @Column({
     type: 'varchar',

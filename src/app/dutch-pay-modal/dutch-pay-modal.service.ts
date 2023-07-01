@@ -47,7 +47,7 @@ export class DutchPayModalService {
    * @param viewSubmissionPayload
    */
   async handleViewSubmission(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
-    const { user, view } = viewSubmissionPayload;
+    const { team, user, view } = viewSubmissionPayload;
 
     // 모달에서 더치 페이 정보 추출
     const dutchPayModal = DutchPayModal.fromViewState(view.state);
@@ -61,6 +61,7 @@ export class DutchPayModalService {
     const participantEntities = participants.map((participant) => {
       const { id: userId, price } = participant;
       return this.participantRepository.create({
+        teamId: team.id,
         userId,
         price,
       });
@@ -71,6 +72,7 @@ export class DutchPayModalService {
       date: date.toDate(),
       description,
       participants: participantEntities,
+      createUserTeamId: team.id,
       createUserId: user.id,
     });
 
