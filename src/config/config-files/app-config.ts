@@ -13,7 +13,7 @@ export class AppConfig {
   @IsEnum(Env)
   env: Env = Env.local;
 
-  @Expose({ name: 'APP_PORT' })
+  @Expose({ name: 'PORT' })
   @IsNumber()
   @Transform(({ value }) => parseInt(value))
   port = 3000;

@@ -1,0 +1,10 @@
+# git
+.git
+.gitignore
+
+# env files
+.env*
+
+# node
+node_modules
+dist

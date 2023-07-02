@@ -2,10 +2,16 @@ import 'reflect-metadata';
 import './common/dayjs/dayjs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { CustomConfigService } from './config/custom-config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+
+  const customConfigService = app.get(CustomConfigService);
+
+  const { port } = customConfigService.appConfig;
+
+  await app.listen(port);
 }
 
 setImmediate(async () => {
