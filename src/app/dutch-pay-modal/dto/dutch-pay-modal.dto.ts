@@ -117,7 +117,7 @@ export class DutchPayModal implements IModal {
       ],
       submit: new PlainTextElement('생성'),
       close: new PlainTextElement('취소'),
-      external_id: DUTCH_PAY_MODAL_EXTERNAL_ID,
+      external_id: DUTCH_PAY_MODAL_EXTERNAL_ID + '/' + `${dayjs().valueOf()}` + `${Math.random()}`,
     };
   }
 

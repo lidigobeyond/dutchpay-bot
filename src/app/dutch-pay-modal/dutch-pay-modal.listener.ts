@@ -15,7 +15,7 @@ export class DutchPayModalListener {
     return this.dutchPayModalService.handleUserSelected(blockActionsPayload);
   }
 
-  @OnEvent(`${VIEW_SUBMISSION}/${DUTCH_PAY_MODAL_EXTERNAL_ID}`, { async: true })
+  @OnEvent(`${VIEW_SUBMISSION}/${DUTCH_PAY_MODAL_EXTERNAL_ID}/*`, { async: true })
   async handleViewSubmission(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
     return this.dutchPayModalService.handleViewSubmission(viewSubmissionPayload);
   }

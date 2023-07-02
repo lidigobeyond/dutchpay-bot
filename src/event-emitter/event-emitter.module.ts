@@ -5,6 +5,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   imports: [
     EventEmitterModule.forRoot({
       global: true,
+      wildcard: true,
       delimiter: '/',
     }),
   ],
