@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SlackService } from '../../modules/slack/slack.service';
+import { SlackService } from '../../slack/slack.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkspaceEntity } from '../../database/entities/workspace.entity';

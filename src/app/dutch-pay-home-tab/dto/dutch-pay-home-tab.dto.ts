@@ -1,10 +1,10 @@
-import { IHome } from '../../../modules/slack/interfaces/home.interface';
+import { IHome } from '../../../slack/interfaces/home.interface';
 import { HomeView } from '@slack/web-api';
-import { SingleSectionBlock } from '../../../modules/slack/types/layout-blocks/single-section-block';
-import { DividerBlock } from '../../../modules/slack/types/layout-blocks/divider-block';
-import { MarkDownElement } from '../../../modules/slack/types/composition-objects/mark-down-element';
-import { ButtonElement } from '../../../modules/slack/types/block-elements/button-element';
-import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
+import { SingleSectionBlock } from '../../../slack/types/layout-blocks/single-section-block';
+import { DividerBlock } from '../../../slack/types/layout-blocks/divider-block';
+import { MarkDownElement } from '../../../slack/types/composition-objects/mark-down-element';
+import { ButtonElement } from '../../../slack/types/block-elements/button-element';
+import { PlainTextElement } from '../../../slack/types/composition-objects/plain-text-element';
 import { CREATE_DUTCH_PAY_ACTION_ID } from '../dutch-pay-home-tab.constant';
 
 export class DutchPayHomeTab implements IHome {

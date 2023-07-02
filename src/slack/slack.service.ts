@@ -7,8 +7,8 @@ import { ChatPostMessageResponse } from '@slack/web-api/dist/response/ChatPostMe
 import { ChatUpdateResponse } from '@slack/web-api/dist/response/ChatUpdateResponse';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { WorkspaceEntity } from '../../database/entities/workspace.entity';
-import { CustomConfigService } from '../../config/custom-config.service';
+import { WorkspaceEntity } from '../database/entities/workspace.entity';
+import { CustomConfigService } from '../config/custom-config.service';
 import { OauthV2AccessResponse } from '@slack/web-api/dist/response/OauthV2AccessResponse';
 import { ViewsOpenResponse } from '@slack/web-api/dist/response/ViewsOpenResponse';
 import { ViewsUpdateResponse } from '@slack/web-api/dist/response/ViewsUpdateResponse';

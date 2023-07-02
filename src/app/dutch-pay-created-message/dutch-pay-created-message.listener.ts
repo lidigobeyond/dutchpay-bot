@@ -3,7 +3,7 @@ import { DutchPayCreatedMessageService } from './dutch-pay-created-message.servi
 import { OnEvent } from '@nestjs/event-emitter';
 import { BLOCK_ACTION } from '../app.constant';
 import { DELETE_DUTCH_PAY_ACTION_ID } from './dutch-pay-created-message.constant';
-import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
+import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
 
 @Injectable()
 export class DutchPayCreatedMessageListener {

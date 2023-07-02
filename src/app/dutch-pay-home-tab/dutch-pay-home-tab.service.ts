@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SlackService } from '../../modules/slack/slack.service';
-import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
+import { SlackService } from '../../slack/slack.service';
+import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
 import { DutchPayModal } from '../dutch-pay-modal/dto/dutch-pay-modal.dto';
 
 @Injectable()

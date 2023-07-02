@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SlackService } from '../../modules/slack/slack.service';
+import { SlackService } from '../../slack/slack.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
+import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ParticipantEntity } from '../../database/entities/participant.entity';

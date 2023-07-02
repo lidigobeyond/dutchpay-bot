@@ -1,13 +1,13 @@
-import { IMessage } from '../../../modules/slack/interfaces/message.interface';
+import { IMessage } from '../../../slack/interfaces/message.interface';
 import { Block, KnownBlock } from '@slack/types';
 import dayjs from 'dayjs';
-import { SingleSectionBlock } from '../../../modules/slack/types/layout-blocks/single-section-block';
-import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
-import { DividerBlock } from '../../../modules/slack/types/layout-blocks/divider-block';
-import { MarkDownElement } from '../../../modules/slack/types/composition-objects/mark-down-element';
-import { ButtonElement } from '../../../modules/slack/types/block-elements/button-element';
+import { SingleSectionBlock } from '../../../slack/types/layout-blocks/single-section-block';
+import { PlainTextElement } from '../../../slack/types/composition-objects/plain-text-element';
+import { DividerBlock } from '../../../slack/types/layout-blocks/divider-block';
+import { MarkDownElement } from '../../../slack/types/composition-objects/mark-down-element';
+import { ButtonElement } from '../../../slack/types/block-elements/button-element';
 import { PAID_BACK_ACTION_ID } from '../dutch-pay-request-message.constant';
-import { ConfirmationDialogElement } from '../../../modules/slack/types/composition-objects/confirmation-dialog-element';
+import { ConfirmationDialogElement } from '../../../slack/types/composition-objects/confirmation-dialog-element';
 
 export interface DutchPayRequestMessageArgs {
   createUserId: string;

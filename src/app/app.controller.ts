@@ -1,17 +1,17 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ClassTransformPipe } from '../common/pipes/class-transform.pipe';
-import { SlashCommandPayload } from '../modules/slack/types/payloads/slash-command-payload';
-import { ParseInteractionPayloadPipe } from '../modules/slack/pipes/parse-interaction-payload.pipe';
-import { InteractionPayload } from '../modules/slack/types/payloads/interaction-payload';
-import { BlockActionsPayload } from '../modules/slack/types/payloads/block-actions-payload';
-import { ViewSubmissionPayload } from '../modules/slack/types/payloads/view-submission-payload';
+import { SlashCommandPayload } from '../slack/types/payloads/slash-command-payload';
+import { ParseInteractionPayloadPipe } from '../slack/pipes/parse-interaction-payload.pipe';
+import { InteractionPayload } from '../slack/types/payloads/interaction-payload';
+import { BlockActionsPayload } from '../slack/types/payloads/block-actions-payload';
+import { ViewSubmissionPayload } from '../slack/types/payloads/view-submission-payload';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AppService } from './app.service';
 import { BLOCK_ACTION, VIEW_SUBMISSION } from './app.constant';
-import { EventPayload } from '../modules/slack/types/payloads/event-payload';
-import { ParseEventPayloadPipe } from '../modules/slack/pipes/parse-event-payload.pipe';
-import { UrlVerifiedEventPayload } from '../modules/slack/types/payloads/url-verified-event-payload';
-import { EventType } from '../modules/slack/types/events/event';
+import { EventPayload } from '../slack/types/payloads/event-payload';
+import { ParseEventPayloadPipe } from '../slack/pipes/parse-event-payload.pipe';
+import { UrlVerifiedEventPayload } from '../slack/types/payloads/url-verified-event-payload';
+import { EventType } from '../slack/types/events/event';
 
 @Controller('dutch-pay-app')
 export class AppController {

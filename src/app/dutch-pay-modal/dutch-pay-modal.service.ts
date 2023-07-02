@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SlackService } from '../../modules/slack/slack.service';
+import { SlackService } from '../../slack/slack.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DutchPayModal } from './dto/dutch-pay-modal.dto';
-import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
-import { ViewSubmissionPayload } from '../../modules/slack/types/payloads/view-submission-payload';
+import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
+import { ViewSubmissionPayload } from '../../slack/types/payloads/view-submission-payload';
 import dayjs from 'dayjs';
 import { DUTCH_PAY_CREATED_EVENT } from '../app.constant';
 import { InjectRepository } from '@nestjs/typeorm';

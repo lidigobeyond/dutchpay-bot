@@ -1,14 +1,14 @@
-import { IModal } from '../../../modules/slack/interfaces/modal.interface';
+import { IModal } from '../../../slack/interfaces/modal.interface';
 import dayjs from 'dayjs';
 import { ModalView } from '@slack/web-api';
-import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
-import { PlainTextInputElement, StateOfPlainTextInputElement } from '../../../modules/slack/types/block-elements/plain-text-input-element';
-import { DatePickerElement, StateOfDatePickerElement } from '../../../modules/slack/types/block-elements/date-picker-element';
-import { ConversationSelectElement } from '../../../modules/slack/types/block-elements/conversation-select-element';
-import { InputBlock } from '../../../modules/slack/types/layout-blocks/input-block';
-import { HeaderBlock } from '../../../modules/slack/types/layout-blocks/header-block';
-import { ActionsBlock } from '../../../modules/slack/types/layout-blocks/actions-block';
-import { ViewState } from '../../../modules/slack/types/payloads/block-actions-payload';
+import { PlainTextElement } from '../../../slack/types/composition-objects/plain-text-element';
+import { PlainTextInputElement, StateOfPlainTextInputElement } from '../../../slack/types/block-elements/plain-text-input-element';
+import { DatePickerElement, StateOfDatePickerElement } from '../../../slack/types/block-elements/date-picker-element';
+import { ConversationSelectElement } from '../../../slack/types/block-elements/conversation-select-element';
+import { InputBlock } from '../../../slack/types/layout-blocks/input-block';
+import { HeaderBlock } from '../../../slack/types/layout-blocks/header-block';
+import { ActionsBlock } from '../../../slack/types/layout-blocks/actions-block';
+import { ViewState } from '../../../slack/types/payloads/block-actions-payload';
 import { DUTCH_PAY_MODAL_EXTERNAL_ID, USER_SELECTED_ACTION_ID } from '../dutch-pay.constant';
 
 export type DutchPayParticipant = {

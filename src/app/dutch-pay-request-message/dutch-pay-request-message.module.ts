@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SlackModule } from '../../modules/slack/slack.module';
+import { SlackModule } from '../../slack/slack.module';
 import { DutchPayRequestMessageListener } from './dutch-pay-request-message.listener';
 import { DutchPayRequestMessageService } from './dutch-pay-request-message.service';
 import { TypeOrmModule } from '@nestjs/typeorm';

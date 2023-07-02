@@ -1,14 +1,14 @@
-import { IMessage } from '../../../modules/slack/interfaces/message.interface';
+import { IMessage } from '../../../slack/interfaces/message.interface';
 import { Block, KnownBlock } from '@slack/web-api';
 import dayjs from 'dayjs';
-import { MultiSectionBlock } from '../../../modules/slack/types/layout-blocks/multi-section-block';
-import { PlainTextElement } from '../../../modules/slack/types/composition-objects/plain-text-element';
-import { MarkDownElement } from '../../../modules/slack/types/composition-objects/mark-down-element';
-import { SingleSectionBlock } from '../../../modules/slack/types/layout-blocks/single-section-block';
-import { DividerBlock } from '../../../modules/slack/types/layout-blocks/divider-block';
-import { OverflowMenuElement } from '../../../modules/slack/types/block-elements/overflow-menu-element';
-import { ConfirmationDialogElement } from '../../../modules/slack/types/composition-objects/confirmation-dialog-element';
-import { PlainTextOptionElement } from '../../../modules/slack/types/composition-objects/plain-text-option-element';
+import { MultiSectionBlock } from '../../../slack/types/layout-blocks/multi-section-block';
+import { PlainTextElement } from '../../../slack/types/composition-objects/plain-text-element';
+import { MarkDownElement } from '../../../slack/types/composition-objects/mark-down-element';
+import { SingleSectionBlock } from '../../../slack/types/layout-blocks/single-section-block';
+import { DividerBlock } from '../../../slack/types/layout-blocks/divider-block';
+import { OverflowMenuElement } from '../../../slack/types/block-elements/overflow-menu-element';
+import { ConfirmationDialogElement } from '../../../slack/types/composition-objects/confirmation-dialog-element';
+import { PlainTextOptionElement } from '../../../slack/types/composition-objects/plain-text-option-element';
 import { DELETE_DUTCH_PAY_ACTION_ID } from '../dutch-pay-created-message.constant';
 
 export interface DutchPayCreatedMessageArgs {

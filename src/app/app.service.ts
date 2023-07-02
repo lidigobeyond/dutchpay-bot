@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DutchPayModal } from './dutch-pay-modal/dto/dutch-pay-modal.dto';
-import { SlackService } from '../modules/slack/slack.service';
+import { SlackService } from '../slack/slack.service';
 import { DutchPayCreatedMessage } from './dutch-pay-created-message/dto/dutch-pay-created-message.dto';
 import dayjs from 'dayjs';
 import { DutchPayRequestMessage } from './dutch-pay-request-message/dto/dutch-pay-request-message.dto';

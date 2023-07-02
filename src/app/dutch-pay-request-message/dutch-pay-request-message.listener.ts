@@ -3,7 +3,7 @@ import { DutchPayRequestMessageService } from './dutch-pay-request-message.servi
 import { OnEvent } from '@nestjs/event-emitter';
 import { BLOCK_ACTION } from '../app.constant';
 import { PAID_BACK_ACTION_ID } from './dutch-pay-request-message.constant';
-import { BlockActionsPayload } from '../../modules/slack/types/payloads/block-actions-payload';
+import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
 
 @Injectable()
 export class DutchPayRequestMessageListener {
