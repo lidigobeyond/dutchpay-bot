@@ -24,9 +24,9 @@ export class DutchPayListener {
   }
 
   /**
-   * 평일(월~금) 8시 55분, 11시 55분, 17시 55분에 입금 완료하지 않은 더치페이 참여자에게 리마인드 메시지를 보냅니다.
+   * 평일(월~금) 9시 55분, 11시 55분, 18시 55분에 입금 완료하지 않은 더치페이 참여자에게 리마인드 메시지를 보냅니다.
    */
-  @Cron('0 55 8,11,17 * * 1-5')
+  @Cron('0 55 9,11,18 * * 1-5')
   sendRemindMessage() {
     return this.dutchPayService.sendRemindMessage();
   }
