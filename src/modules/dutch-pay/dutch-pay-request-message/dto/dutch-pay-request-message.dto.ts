@@ -42,11 +42,11 @@ export class DutchPayRequestMessage implements IMessage {
 
   toBlocks(): (KnownBlock | Block)[] {
     if (this.isDutchPayDeleted) {
-      return [new SingleSectionBlock({ text: new MarkDownElement(`<@${this.createUserId}> 님께서 더치 페이를 삭제하셨습니다.`) })];
+      return [new SingleSectionBlock({ text: new MarkDownElement(`<@${this.createUserId}> 님께서 더치페이를 삭제하셨습니다.`) })];
     }
 
     return [
-      new SingleSectionBlock({ text: new MarkDownElement(`<@${this.createUserId}> 님께서 더치 페이를 요청하셨습니다.`) }),
+      new SingleSectionBlock({ text: new MarkDownElement(`<@${this.createUserId}> 님께서 더치페이를 요청하셨습니다.`) }),
       new DividerBlock(),
       new SingleSectionBlock({ text: new MarkDownElement('*제목:*') }),
       new SingleSectionBlock({ text: new MarkDownElement(`> ${this.title}`) }),

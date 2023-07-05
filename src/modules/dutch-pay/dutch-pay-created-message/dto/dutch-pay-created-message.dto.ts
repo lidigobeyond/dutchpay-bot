@@ -42,12 +42,12 @@ export class DutchPayCreatedMessage implements IMessage {
 
   toBlocks(): (KnownBlock | Block)[] {
     if (this.isDeleted) {
-      return [new SingleSectionBlock({ text: new MarkDownElement('더치 페이가 삭제되었습니다.') })];
+      return [new SingleSectionBlock({ text: new MarkDownElement('더치페이가 삭제되었습니다.') })];
     }
 
     return [
       new SingleSectionBlock({
-        text: new PlainTextElement('더치 페이가 생성되었습니다.'),
+        text: new PlainTextElement('더치페이가 생성되었습니다.'),
         accessory: this.isFinished
           ? undefined
           : new OverflowMenuElement({

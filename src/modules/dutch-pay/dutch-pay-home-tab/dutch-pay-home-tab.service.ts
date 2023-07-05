@@ -10,7 +10,7 @@ export class DutchPayHomeTabService {
   constructor(private readonly slackService: SlackService) {}
 
   /**
-   * 더치 페이 생성 요청 이벤트 처리 함수
+   * 더치페이 생성 요청 이벤트 처리 함수
    * @param blockActionPayload
    */
   async handleCreateDutchPay(blockActionPayload: BlockActionsPayload): Promise<void> {

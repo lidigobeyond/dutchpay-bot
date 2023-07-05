@@ -21,7 +21,7 @@ export class DutchPayService {
   ) {}
 
   /**
-   * 사용자에게 새로운 더치 페이 생성 모달을 엽니다.
+   * 사용자에게 새로운 더치페이 생성 모달을 엽니다.
    * @param args
    */
   async openNewDutchPayModal(args: { teamId: string; triggerId: string; title?: string }): Promise<void> {
@@ -49,11 +49,11 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이 생성 이벤트를 처리합니다.
+   * 더치페이 생성 이벤트를 처리합니다.
    * @param dutchPayId
    */
   async handleDutchPayCreated(dutchPayId: number): Promise<void> {
-    // 더치 페이 정보 조회
+    // 더치페이 정보 조회
     const dutchPay = await this.dutchPayRepository.findOne({
       where: {
         id: dutchPayId,
@@ -68,7 +68,7 @@ export class DutchPayService {
       throw new Error();
     }
 
-    // 모든 참여자에게 더치 페이 요청 메시지 발송
+    // 모든 참여자에게 더치페이 요청 메시지 발송
     for (const participant of dutchPay.participants) {
       const response = await this.sendDutchPayRequestMessage(participant);
 
@@ -81,7 +81,7 @@ export class DutchPayService {
       participant.ts = response.ts!;
     }
 
-    // 더치 페이를 생성한 유저에게 더치 페이 생성 완료 메시지 발송
+    // 더치페이를 생성한 유저에게 더치페이 생성 완료 메시지 발송
     const response = await this.sendDutchPayCreatedMessage(dutchPay);
 
     if (!response.ok) {
@@ -97,18 +97,18 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이 참여자들에게 더치 페이 요청 메시지를 보냅니다.
+   * 더치페이 참여자들에게 더치페이 요청 메시지를 보냅니다.
    * @param participant
    */
   sendDutchPayRequestMessage(participant: ParticipantEntity) {
     const { teamId, userId: participantId, price, isPayBack, dutchPay } = participant;
     const { createUserId, title, date, description, isDeleted: isDutchPayDeleted } = dutchPay;
 
-    // 더치 페이 요청 메시지 발송
+    // 더치페이 요청 메시지 발송
     return this.slackService.postMessage({
       teamId,
       channelId: participantId,
-      text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
+      text: `<@${createUserId}> 님께서 더치페이를 요청하셨습니다.`,
       message: new DutchPayRequestMessage({
         createUserId,
         title,
@@ -122,17 +122,17 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이를 생성한 유저에게 더치 페이 생성 완료 메시지를 보냅니다.
+   * 더치페이를 생성한 유저에게 더치페이 생성 완료 메시지를 보냅니다.
    * @param dutchPay
    */
   sendDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
     const { createUserTeamId, createUserId, title, date, description, participants, isDeleted } = dutchPay;
 
-    // 더치 페이 생성 완료 메시지 발송
+    // 더치페이 생성 완료 메시지 발송
     return this.slackService.postMessage({
       teamId: createUserTeamId,
       channelId: createUserId,
-      text: '더치 페이가 생성되었습니다.',
+      text: '더치페이가 생성되었습니다.',
       message: new DutchPayCreatedMessage({
         title,
         date: dayjs(date),
@@ -148,7 +148,7 @@ export class DutchPayService {
    * @param participantId
    */
   async handleParticipantPaidBack(participantId: number): Promise<void> {
-    // 참여자와 참여자가 참여하고 있는 더치 페이 정보 조회
+    // 참여자와 참여자가 참여하고 있는 더치페이 정보 조회
     const participant = await this.participantRepository.findOne({
       where: { id: participantId },
       relations: { dutchPay: { participants: true } },
@@ -159,23 +159,23 @@ export class DutchPayService {
       throw new Error();
     }
 
-    // 더치 페이 참여자에게 발송했던 더치 페이 요청 메시지 수정
+    // 더치페이 참여자에게 발송했던 더치페이 요청 메시지 수정
     await this.updateDutchPayRequestMessage(participant);
-    // 더치 페이를 생성한 유저에게 발송했던 더치 페이 생성 완료 메시지 수정
+    // 더치페이를 생성한 유저에게 발송했던 더치페이 생성 완료 메시지 수정
     await this.updateDutchPayCreatedMessage(participant.dutchPay);
-    // 더치 페이를 생성한 유저에게 입금 완료 안내 메시지 발송
+    // 더치페이를 생성한 유저에게 입금 완료 안내 메시지 발송
     await this.sendParticipantPaidBackMessage(participant);
 
-    // 모든 더치 페이 참여자가 입금 완료한 경우
+    // 모든 더치페이 참여자가 입금 완료한 경우
     const everyParticipantsPaidBack = participant.dutchPay.participants.every((participant) => participant.isPayBack);
     if (everyParticipantsPaidBack) {
-      // 더치 페이를 생성한 유저에게 더치 페이 완료 메시지 발송
+      // 더치페이를 생성한 유저에게 더치페이 완료 메시지 발송
       await this.sendDutchPayFinishedMessage(participant.dutchPay);
     }
   }
 
   /**
-   * 더치 페이 참여자에게 발송했던 더치 페이 요청 메시지를 수정합니다.
+   * 더치페이 참여자에게 발송했던 더치페이 요청 메시지를 수정합니다.
    * @param participant
    */
   updateDutchPayRequestMessage(participant: ParticipantEntity) {
@@ -186,7 +186,7 @@ export class DutchPayService {
       teamId,
       channelId,
       ts,
-      text: `<@${createUserId}> 님께서 더치 페이를 요청하셨습니다.`,
+      text: `<@${createUserId}> 님께서 더치페이를 요청하셨습니다.`,
       message: new DutchPayRequestMessage({
         createUserId,
         title,
@@ -200,7 +200,7 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이를 생성한 유저에게 발송했던 더치 페이 생성 완료 메시지를 수정합니다.
+   * 더치페이를 생성한 유저에게 발송했던 더치페이 생성 완료 메시지를 수정합니다.
    * @param dutchPay
    */
   updateDutchPayCreatedMessage(dutchPay: DutchPayEntity) {
@@ -210,7 +210,7 @@ export class DutchPayService {
       teamId: createUserTeamId,
       channelId,
       ts,
-      text: '더치 페이가 생성되었습니다.',
+      text: '더치페이가 생성되었습니다.',
       message: new DutchPayCreatedMessage({
         title,
         date: dayjs(date),
@@ -222,7 +222,7 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이를 생성한 유저에게 입금 완료 메시지를 보냅니다.
+   * 더치페이를 생성한 유저에게 입금 완료 메시지를 보냅니다.
    * @param participant
    */
   sendParticipantPaidBackMessage(participant: ParticipantEntity) {
@@ -238,7 +238,7 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이를 생성한 유저에게 더치 페이 완료 메시지를 보냅니다.
+   * 더치페이를 생성한 유저에게 더치페이 완료 메시지를 보냅니다.
    * @param dutchPay
    */
   sendDutchPayFinishedMessage(dutchPay: DutchPayEntity) {
@@ -253,11 +253,11 @@ export class DutchPayService {
   }
 
   /**
-   * 더치 페이 삭제 이벤트를 처리합니다.
+   * 더치페이 삭제 이벤트를 처리합니다.
    * @param dutchPayId
    */
   async handleDutchPayDeleted(dutchPayId: number): Promise<void> {
-    // 더치 페이 정보 조회
+    // 더치페이 정보 조회
     const dutchPay = await this.dutchPayRepository.findOne({
       where: {
         id: dutchPayId,
@@ -273,7 +273,7 @@ export class DutchPayService {
     }
 
     for (const participant of dutchPay.participants) {
-      // 더치 페이 참여자에게 발송했던 더치 페이 요청 메시지 수정
+      // 더치페이 참여자에게 발송했던 더치페이 요청 메시지 수정
       const response = await this.updateDutchPayRequestMessage(participant);
 
       if (!response.ok) {
@@ -282,7 +282,7 @@ export class DutchPayService {
       }
     }
 
-    // 더치 페이를 생성한 유저에게 발송했던 더치 페이 생성 완료 메시지 수정
+    // 더치페이를 생성한 유저에게 발송했던 더치페이 생성 완료 메시지 수정
     const response = await this.updateDutchPayCreatedMessage(dutchPay);
 
     if (!response.ok) {
@@ -292,12 +292,12 @@ export class DutchPayService {
   }
 
   /**
-   * 입금 완료하지 않은 더치 페이 참여자에게 리마인드 메시지를 보냅니다.
+   * 입금 완료하지 않은 더치페이 참여자에게 리마인드 메시지를 보냅니다.
    */
   async sendRemindMessage(): Promise<void> {
     this.logger.log(`리마인드 메시지 발송 시작`);
 
-    // 입금 완료하지 않은 더치 페이 참여자 목록 조회
+    // 입금 완료하지 않은 더치페이 참여자 목록 조회
     const participants = await this.participantRepository.findBy({
       isPayBack: false,
       dutchPay: {

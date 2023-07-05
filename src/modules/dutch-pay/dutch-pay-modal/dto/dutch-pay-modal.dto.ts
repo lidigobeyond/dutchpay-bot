@@ -60,7 +60,7 @@ export class DutchPayModal implements IModal {
   toModalView(): ModalView {
     return {
       type: 'modal',
-      title: new PlainTextElement('더치 페이 생성'),
+      title: new PlainTextElement('더치페이 생성'),
       blocks: [
         new InputBlock({
           id: 'title_block',
