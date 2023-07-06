@@ -29,7 +29,6 @@ export class AuthService {
     // 워크스페이스 정보와 토큰 정보를 저장합니다.
     const workspaceEntity = this.workspaceRepository.create({
       id: response.team!.id,
-      name: response.team!.name,
       token: response.access_token,
       tokenType: response.token_type,
       scope: response.scope,

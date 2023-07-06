@@ -12,13 +12,6 @@ export class Workspace {
 
   @Column({
     type: 'varchar',
-    length: 127,
-    comment: '이름',
-  })
-  name: string;
-
-  @Column({
-    type: 'varchar',
     length: 255,
     comment: '엑세스 토큰',
   })
@@ -42,12 +35,14 @@ export class Workspace {
   @Column({
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  botUserId: string;
+  botUserId?: string;
 
   @Column({
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  appId: string;
+  appId?: string;
 }
