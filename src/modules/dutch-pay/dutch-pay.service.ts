@@ -52,7 +52,7 @@ export class DutchPayService {
    * 더치페이 생성 이벤트를 처리합니다.
    * @param dutchpayId
    */
-  async handleDutchPayCreated(dutchpayId: number): Promise<void> {
+  async handleDutchPayCreatedEvent(dutchpayId: number): Promise<void> {
     // 더치페이 정보 조회
     const dutchpay = await this.dutchpayRepository.findOne({
       where: {
@@ -147,7 +147,7 @@ export class DutchPayService {
    * 입금 완료 이벤트를 처리합니다.
    * @param participantId
    */
-  async handleParticipantPaidBack(participantId: number): Promise<void> {
+  async handleParticipantPaidBackEvent(participantId: number): Promise<void> {
     // 참여자와 참여자가 참여하고 있는 더치페이 정보 조회
     const participant = await this.participantRepository.findOne({
       where: { id: participantId },
@@ -256,7 +256,7 @@ export class DutchPayService {
    * 더치페이 삭제 이벤트를 처리합니다.
    * @param dutchpayId
    */
-  async handleDutchPayDeleted(dutchpayId: number): Promise<void> {
+  async handleDutchPayDeletedEvent(dutchpayId: number): Promise<void> {
     // 더치페이 정보 조회
     const dutchpay = await this.dutchpayRepository.findOne({
       where: {

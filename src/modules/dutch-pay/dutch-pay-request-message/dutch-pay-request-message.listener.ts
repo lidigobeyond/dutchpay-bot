@@ -10,7 +10,7 @@ export class DutchPayRequestMessageListener {
   constructor(private readonly dutchPayRequestMessageService: DutchPayRequestMessageService) {}
 
   @OnEvent(`${BLOCK_ACTION}/${PAID_BACK_ACTION_ID}`, { async: true })
-  handlePaidBack(blockActionPayload: BlockActionsPayload) {
-    return this.dutchPayRequestMessageService.handlePaidBack(blockActionPayload);
+  handlePaidBackEvent(blockActionPayload: BlockActionsPayload) {
+    return this.dutchPayRequestMessageService.handlePaidBackEvent(blockActionPayload);
   }
 }

@@ -10,7 +10,7 @@ export class DutchPayCreatedMessageListener {
   constructor(private readonly dutchPayCreatedMessageService: DutchPayCreatedMessageService) {}
 
   @OnEvent(`${BLOCK_ACTION}/${DELETE_DUTCH_PAY_ACTION_ID}`, { async: true })
-  handleDeleteDutchPay(blockActionPayload: BlockActionsPayload) {
-    return this.dutchPayCreatedMessageService.handleDeleteDutchPay(blockActionPayload);
+  handleDeleteDutchPayEvent(blockActionPayload: BlockActionsPayload) {
+    return this.dutchPayCreatedMessageService.handleDeleteDutchPayEvent(blockActionPayload);
   }
 }

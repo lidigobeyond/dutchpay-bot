@@ -10,7 +10,7 @@ export class DutchPayHomeTabListener {
   constructor(private readonly dutchPayHomeTabService: DutchPayHomeTabService) {}
 
   @OnEvent(`${BLOCK_ACTION}/${CREATE_DUTCH_PAY_ACTION_ID}`, { async: true })
-  handleCreateDutchPay(blockActionPayload: BlockActionsPayload) {
-    return this.dutchPayHomeTabService.handleCreateDutchPay(blockActionPayload);
+  handleCreateDutchPayEvent(blockActionPayload: BlockActionsPayload) {
+    return this.dutchPayHomeTabService.handleCreateDutchPayEvent(blockActionPayload);
   }
 }

@@ -9,18 +9,18 @@ export class DutchPayListener {
   constructor(private readonly dutchPayService: DutchPayService) {}
 
   @OnEvent(DUTCH_PAY_CREATED_EVENT, { async: true })
-  handleDutchPayCreated(dutchPayId: number): Promise<void> {
-    return this.dutchPayService.handleDutchPayCreated(dutchPayId);
+  handleDutchPayCreatedEvent(dutchPayId: number): Promise<void> {
+    return this.dutchPayService.handleDutchPayCreatedEvent(dutchPayId);
   }
 
   @OnEvent(PARTICIPANT_PAID_BACK_EVENT, { async: true })
-  handleParticipantPaidBack(participantId: number): Promise<void> {
-    return this.dutchPayService.handleParticipantPaidBack(participantId);
+  handleParticipantPaidBackEvent(participantId: number): Promise<void> {
+    return this.dutchPayService.handleParticipantPaidBackEvent(participantId);
   }
 
   @OnEvent(DUTCH_PAY_DELETED_EVENT, { async: true })
-  handleDutchPayDeleted(dutchPayId: number): Promise<void> {
-    return this.dutchPayService.handleDutchPayDeleted(dutchPayId);
+  handleDutchPayDeletedEvent(dutchPayId: number): Promise<void> {
+    return this.dutchPayService.handleDutchPayDeletedEvent(dutchPayId);
   }
 
   /**

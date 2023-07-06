@@ -13,7 +13,7 @@ export class DutchPayHomeTabService {
    * 더치페이 생성 요청 이벤트 처리 함수
    * @param blockActionPayload
    */
-  async handleCreateDutchPay(blockActionPayload: BlockActionsPayload): Promise<void> {
+  async handleCreateDutchPayEvent(blockActionPayload: BlockActionsPayload): Promise<void> {
     const { team, triggerId } = blockActionPayload;
 
     const dutchPayModal = new DutchPayModal({});

@@ -11,12 +11,12 @@ export class DutchPayModalListener {
   constructor(private readonly dutchPayModalService: DutchPayModalService) {}
 
   @OnEvent(`${BLOCK_ACTION}/${USER_SELECTED_ACTION_ID}`, { async: true })
-  async handleUserSelected(blockActionsPayload: BlockActionsPayload) {
-    return this.dutchPayModalService.handleUserSelected(blockActionsPayload);
+  async handleUserSelectedEvent(blockActionsPayload: BlockActionsPayload) {
+    return this.dutchPayModalService.handleUserSelectedEvent(blockActionsPayload);
   }
 
   @OnEvent(`${VIEW_SUBMISSION}/${DUTCH_PAY_MODAL_EXTERNAL_ID}/*`, { async: true })
-  async handleViewSubmission(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
-    return this.dutchPayModalService.handleViewSubmission(viewSubmissionPayload);
+  async handleViewSubmissionEvent(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
+    return this.dutchPayModalService.handleViewSubmissionEvent(viewSubmissionPayload);
   }
 }

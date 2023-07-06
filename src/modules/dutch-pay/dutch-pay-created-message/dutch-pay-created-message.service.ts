@@ -21,7 +21,7 @@ export class DutchPayCreatedMessageService {
    * 더치페이 삭제 요청 이벤트 처리 함수
    * @param blockActionPayload
    */
-  async handleDeleteDutchPay(blockActionPayload: BlockActionsPayload): Promise<void> {
+  async handleDeleteDutchPayEvent(blockActionPayload: BlockActionsPayload): Promise<void> {
     const { team, user, message } = blockActionPayload;
 
     // 더치페이 정보 조회

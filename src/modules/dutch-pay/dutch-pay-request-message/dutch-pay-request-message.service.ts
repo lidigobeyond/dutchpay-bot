@@ -21,7 +21,7 @@ export class DutchPayRequestMessageService {
    * 입금 완료 이벤트 처리 함수
    * @param blockActionPayload
    */
-  async handlePaidBack(blockActionPayload: BlockActionsPayload): Promise<void> {
+  async handlePaidBackEvent(blockActionPayload: BlockActionsPayload): Promise<void> {
     const { team, user, message } = blockActionPayload;
 
     // 참여자 정보 조회

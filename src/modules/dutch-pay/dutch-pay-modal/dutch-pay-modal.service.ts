@@ -26,7 +26,7 @@ export class DutchPayModalService {
    * 사용자가 더치페이 생성 모달에서 참여자를 추가했을 때 발생하는 이벤트를 처리합니다.
    * @param blockActionsPayload
    */
-  async handleUserSelected(blockActionsPayload: BlockActionsPayload): Promise<void> {
+  async handleUserSelectedEvent(blockActionsPayload: BlockActionsPayload): Promise<void> {
     const { team, view, actions } = blockActionsPayload;
 
     // 모달 상태 정보 추출
@@ -50,7 +50,7 @@ export class DutchPayModalService {
    * 사용자가 더치페이 생성 모달에서 생성 버튼을 눌렀을 때 발생하는 이벤트 처리 함수
    * @param viewSubmissionPayload
    */
-  async handleViewSubmission(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
+  async handleViewSubmissionEvent(viewSubmissionPayload: ViewSubmissionPayload): Promise<void> {
     const { team, user, view } = viewSubmissionPayload;
 
     // 모달에서 더치페이 정보 추출
