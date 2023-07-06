@@ -3,7 +3,7 @@ import { SlackService } from '../../../slack/slack.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DutchPayEntity } from '../../../database/entities/dutch-pay.entity';
+import { Dutchpay } from '../../../database/entities/dutchpay.entity';
 import { BlockActionsPayload } from '../../../slack/types/payloads/block-actions-payload';
 import { DUTCH_PAY_DELETED_EVENT } from '../dutch-pay.constant';
 
@@ -14,7 +14,7 @@ export class DutchPayCreatedMessageService {
   constructor(
     private readonly slackService: SlackService,
     private readonly eventEmitter: EventEmitter2,
-    @InjectRepository(DutchPayEntity) private readonly dutchPayEntityRepository: Repository<DutchPayEntity>,
+    @InjectRepository(Dutchpay) private readonly dutchpayRepository: Repository<Dutchpay>,
   ) {}
 
   /**
@@ -25,22 +25,22 @@ export class DutchPayCreatedMessageService {
     const { team, user, message } = blockActionPayload;
 
     // 더치페이 정보 조회
-    const dutchPay = await this.dutchPayEntityRepository.findOneBy({
+    const dutchpay = await this.dutchpayRepository.findOneBy({
       createUserTeamId: team.id,
       createUserId: user.id,
       ts: message!.ts,
     });
 
-    if (!dutchPay) {
+    if (!dutchpay) {
       throw new Error('더치페이 정보가 없습니다!');
     }
 
     // 더치페이 삭제 처리
-    dutchPay.isDeleted = true;
+    dutchpay.isDeleted = true;
 
-    await this.dutchPayEntityRepository.save(dutchPay);
+    await this.dutchpayRepository.save(dutchpay);
 
     // 더치페이 삭제 이벤트 발행
-    this.eventEmitter.emit(DUTCH_PAY_DELETED_EVENT, dutchPay.id);
+    this.eventEmitter.emit(DUTCH_PAY_DELETED_EVENT, dutchpay.id);
   }
 }

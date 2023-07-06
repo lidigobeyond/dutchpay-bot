@@ -1,9 +1,9 @@
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DutchPayEntity } from './dutch-pay.entity';
+import { Dutchpay } from './dutchpay.entity';
 
 @Index(['teamId', 'userId'])
 @Entity()
-export class ParticipantEntity {
+export class Participant {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -51,6 +51,6 @@ export class ParticipantEntity {
   })
   isPayBack: boolean;
 
-  @ManyToOne(() => DutchPayEntity, (dutchpay) => dutchpay.participants)
-  dutchPay: DutchPayEntity;
+  @ManyToOne(() => Dutchpay, (dutchpay) => dutchpay.participants)
+  dutchpay: Dutchpay;
 }

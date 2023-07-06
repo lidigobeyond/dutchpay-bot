@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { SlackService } from '../../../slack/slack.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { WorkspaceEntity } from '../../../database/entities/workspace.entity';
+import { Workspace } from '../../../database/entities/workspace.entity';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +10,7 @@ export class AuthService {
 
   constructor(
     private readonly slackService: SlackService,
-    @InjectRepository(WorkspaceEntity) private readonly workspaceRepository: Repository<WorkspaceEntity>,
+    @InjectRepository(Workspace) private readonly workspaceRepository: Repository<Workspace>,
   ) {}
 
   /**

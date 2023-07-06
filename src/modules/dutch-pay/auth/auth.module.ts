@@ -3,10 +3,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SlackModule } from '../../../slack/slack.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorkspaceEntity } from '../../../database/entities/workspace.entity';
+import { Workspace } from '../../../database/entities/workspace.entity';
 
 @Module({
-  imports: [SlackModule, TypeOrmModule.forFeature([WorkspaceEntity])],
+  imports: [SlackModule, TypeOrmModule.forFeature([Workspace])],
   controllers: [AuthController],
   providers: [AuthService],
 })

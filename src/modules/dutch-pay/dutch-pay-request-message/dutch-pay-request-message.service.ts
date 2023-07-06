@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BlockActionsPayload } from '../../../slack/types/payloads/block-actions-payload';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ParticipantEntity } from '../../../database/entities/participant.entity';
+import { Participant } from '../../../database/entities/participant.entity';
 import { PARTICIPANT_PAID_BACK_EVENT } from '../dutch-pay.constant';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class DutchPayRequestMessageService {
   constructor(
     private readonly slackService: SlackService,
     private readonly eventEmitter: EventEmitter2,
-    @InjectRepository(ParticipantEntity) private readonly participantRepository: Repository<ParticipantEntity>,
+    @InjectRepository(Participant) private readonly participantRepository: Repository<Participant>,
   ) {}
 
   /**

@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
 @Entity()
-export class WorkspaceEntity {
+export class Workspace {
   @Column({
     type: 'varchar',
     length: 127,

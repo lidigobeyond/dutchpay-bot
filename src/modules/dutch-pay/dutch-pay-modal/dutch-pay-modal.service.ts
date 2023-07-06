@@ -7,9 +7,9 @@ import { ViewSubmissionPayload } from '../../../slack/types/payloads/view-submis
 import dayjs from 'dayjs';
 import { DUTCH_PAY_CREATED_EVENT } from '../dutch-pay.constant';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DutchPayEntity } from '../../../database/entities/dutch-pay.entity';
+import { Dutchpay } from '../../../database/entities/dutchpay.entity';
 import { Repository } from 'typeorm';
-import { ParticipantEntity } from '../../../database/entities/participant.entity';
+import { Participant } from '../../../database/entities/participant.entity';
 
 @Injectable()
 export class DutchPayModalService {
@@ -18,8 +18,8 @@ export class DutchPayModalService {
   constructor(
     private readonly slackService: SlackService,
     private readonly eventEmitter: EventEmitter2,
-    @InjectRepository(DutchPayEntity) private readonly dutchPayRepository: Repository<DutchPayEntity>,
-    @InjectRepository(ParticipantEntity) private readonly participantRepository: Repository<ParticipantEntity>,
+    @InjectRepository(Dutchpay) private readonly dutchpayRepository: Repository<Dutchpay>,
+    @InjectRepository(Participant) private readonly participantRepository: Repository<Participant>,
   ) {}
 
   /**
@@ -59,10 +59,10 @@ export class DutchPayModalService {
     const title = dutchPayModal.title as string;
     const date = dutchPayModal.date as dayjs.Dayjs;
     const description = dutchPayModal.description;
-    const participants = dutchPayModal.participants as { id: string; price: string }[];
+    const participantIdAndPriceList = dutchPayModal.participants as { id: string; price: string }[];
 
     // 더치페이 정보 저장
-    const participantEntities = participants.map((participant) => {
+    const participants = participantIdAndPriceList.map((participant) => {
       const { id: userId, price } = participant;
       return this.participantRepository.create({
         teamId: team.id,
@@ -71,18 +71,18 @@ export class DutchPayModalService {
       });
     });
 
-    const dutchPayEntity = this.dutchPayRepository.create({
+    const dutchpay = this.dutchpayRepository.create({
       title,
       date: date.toDate(),
       description,
-      participants: participantEntities,
+      participants,
       createUserTeamId: team.id,
       createUserId: user.id,
     });
 
-    await this.dutchPayRepository.save(dutchPayEntity);
+    await this.dutchpayRepository.save(dutchpay);
 
     // 더치페이 생성 완료 이벤트 발행
-    this.eventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchPayEntity.id);
+    this.eventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchpay.id);
   }
 }

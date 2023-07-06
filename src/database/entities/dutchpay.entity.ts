@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { ParticipantEntity } from './participant.entity';
+import { Participant } from './participant.entity';
 
 @Index(['createUserTeamId', 'createUserId'])
 @Entity()
-export class DutchPayEntity {
+export class Dutchpay {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -43,10 +43,10 @@ export class DutchPayEntity {
   })
   description?: string;
 
-  @OneToMany(() => ParticipantEntity, (participant) => participant.dutchPay, {
+  @OneToMany(() => Participant, (participant) => participant.dutchpay, {
     cascade: true,
   })
-  participants: ParticipantEntity[];
+  participants: Participant[];
 
   @Column({
     type: 'boolean',
