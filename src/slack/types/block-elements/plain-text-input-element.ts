@@ -6,6 +6,9 @@ export interface PlainTextInputElementArgs {
   initialValue?: string;
   placeholder?: string;
   multiline?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  focusOnLoad?: boolean;
 }
 
 /**
@@ -18,14 +21,20 @@ export class PlainTextInputElement implements Parent {
   placeholder?: PlainTextElement;
   initial_value?: string;
   multiline?: boolean;
+  min_length?: number;
+  max_length?: number;
+  focus_on_load?: boolean;
 
   constructor(args: PlainTextInputElementArgs) {
-    const { actionId, placeholder, initialValue, multiline } = args;
+    const { actionId, placeholder, initialValue, multiline, minLength, maxLength, focusOnLoad } = args;
 
     this.action_id = actionId;
     this.placeholder = placeholder ? new PlainTextElement(placeholder) : undefined;
     this.initial_value = initialValue ?? undefined;
     this.multiline = multiline ?? undefined;
+    this.min_length = minLength;
+    this.max_length = maxLength;
+    this.focus_on_load = focusOnLoad;
   }
 }
 

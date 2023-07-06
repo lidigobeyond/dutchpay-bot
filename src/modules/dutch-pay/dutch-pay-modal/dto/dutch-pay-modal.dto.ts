@@ -70,6 +70,8 @@ export class DutchPayModal implements IModal {
             placeholder: '예) 점심 강남 진해장국',
             initialValue: this.title,
             multiline: false,
+            maxLength: 50,
+            focusOnLoad: true,
           }),
         }),
         new InputBlock({
@@ -102,6 +104,7 @@ export class DutchPayModal implements IModal {
               actionId: 'price',
               placeholder: '예) 12000원',
               initialValue: price,
+              maxLength: 15,
             }),
           });
         }),
