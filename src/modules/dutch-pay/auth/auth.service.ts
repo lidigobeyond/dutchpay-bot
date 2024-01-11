@@ -38,4 +38,12 @@ export class AuthService {
 
     await this.workspaceRepository.save(workspaceEntity);
   }
+
+  /**
+   * 워크스페이스 정보와 토큰 정보를 삭제합니다.
+   * @param id
+   */
+  async deleteWorkspaceById(id: string): Promise<void> {
+    await this.workspaceRepository.delete(id);
+  }
 }

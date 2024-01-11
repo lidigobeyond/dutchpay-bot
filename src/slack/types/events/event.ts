@@ -3,6 +3,7 @@ import { Expose } from 'class-transformer';
 export enum EventType {
   URL_VERIFIED = 'url_verification',
   APP_HOME_OPENED = 'app_home_opened',
+  APP_UNINSTALLED = 'app_uninstalled',
 }
 
 /**

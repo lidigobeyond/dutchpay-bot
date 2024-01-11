@@ -7,7 +7,7 @@ import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-pa
 import { ViewSubmissionPayload } from '../../slack/types/payloads/view-submission-payload';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DutchPayService } from './dutch-pay.service';
-import { BLOCK_ACTION, VIEW_SUBMISSION } from './dutch-pay.constant';
+import { APP_UNINSTALLED_EVENT, BLOCK_ACTION, VIEW_SUBMISSION } from './dutch-pay.constant';
 import { EventPayload } from '../../slack/types/payloads/event-payload';
 import { ParseEventPayloadPipe } from '../../slack/pipes/parse-event-payload.pipe';
 import { UrlVerifiedEventPayload } from '../../slack/types/payloads/url-verified-event-payload';
@@ -59,6 +59,8 @@ export class DutchPayController {
     switch (payload.event.type) {
       case EventType.APP_HOME_OPENED:
         return this.handleAppHomeOpenedEvent(payload);
+      case EventType.APP_UNINSTALLED:
+        return this.handleAppUninstalledEvent(payload);
     }
   }
 
@@ -81,5 +83,14 @@ export class DutchPayController {
     const { user } = event;
 
     return this.dutchPayService.openNewHomeTab({ teamId, userId: user });
+  }
+
+  /**
+   * 더치페이봇이 워크스페이스에서 삭제되었을 때 발생하는 이벤트를 처리합니다.
+   * 참고 : https://api.slack.com/events/app_uninstalled
+   * @param payload
+   */
+  handleAppUninstalledEvent(payload: EventPayload) {
+    this.eventEmitter.emit(APP_UNINSTALLED_EVENT, payload);
   }
 }

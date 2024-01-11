@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { Event, EventType } from '../events/event';
 import { AppHomeOpenedEvent } from '../events/app-home-opened-event';
+import { AppUninstalledEvent } from '../events/app-uninstalled-event';
 
 /**
  * 구독하고 있는 특정 이벤트가 발생했을 때 발생하는 요청 바디
@@ -25,7 +26,10 @@ export class EventPayload {
   @Type(() => Event, {
     discriminator: {
       property: 'type',
-      subTypes: [{ value: AppHomeOpenedEvent, name: EventType.APP_HOME_OPENED }],
+      subTypes: [
+        { value: AppHomeOpenedEvent, name: EventType.APP_HOME_OPENED },
+        { value: AppUninstalledEvent, name: EventType.APP_UNINSTALLED },
+      ],
     },
     keepDiscriminatorProperty: true,
   })
