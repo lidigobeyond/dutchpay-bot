@@ -28,7 +28,7 @@ export class AuthService {
 
     // 워크스페이스 정보와 토큰 정보를 저장합니다.
     const workspaceEntity = this.workspaceRepository.create({
-      id: response.team!.id,
+      teamId: response.team!.id,
       token: response.access_token,
       tokenType: response.token_type,
       scope: response.scope,
@@ -41,9 +41,9 @@ export class AuthService {
 
   /**
    * 워크스페이스 정보와 토큰 정보를 삭제합니다.
-   * @param id
+   * @param teamId
    */
-  async deleteWorkspaceById(id: string): Promise<void> {
-    await this.workspaceRepository.delete(id);
+  async deleteWorkspaceByTeamId(teamId: string): Promise<void> {
+    await this.workspaceRepository.delete({ teamId });
   }
 }

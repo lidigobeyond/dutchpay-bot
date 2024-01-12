@@ -174,7 +174,7 @@ export class SlackService {
    */
   private async getAccessTokenByTeamId(teamId: string): Promise<string | null> {
     const workspace = await this.workspaceRepository.findOneBy({
-      id: teamId,
+      teamId,
     });
 
     if (!workspace) {

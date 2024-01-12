@@ -1,14 +1,21 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Workspace {
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    unsigned: true,
+    comment: '아이디',
+  })
+  id: number;
+
   @Column({
     type: 'varchar',
     length: 127,
-    comment: '아이디',
-    primary: true,
+    comment: '워크스페이스 아이디',
+    unique: true,
   })
-  id: string;
+  teamId: string;
 
   @Column({
     type: 'varchar',
@@ -28,7 +35,7 @@ export class Workspace {
   // 참고 : https://api.slack.com/scopes
   @Column({
     type: 'text',
-    comment: ['앱에 허용된 권한 목록', '콤마(,)로 나눠져있음'].join('\n'),
+    comment: '앱에 허용된 권한 목록 (콤마(,)로 나눠져있음)',
   })
   scope: string;
 
@@ -45,4 +52,11 @@ export class Workspace {
     nullable: true,
   })
   appId?: string;
+
+  @Column({
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+    comment: '생성일시',
+  })
+  createdAt: Date;
 }

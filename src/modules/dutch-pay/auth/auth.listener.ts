@@ -12,6 +12,6 @@ export class AuthListener {
   handleAppUninstalledEvent(eventPayload: EventPayload) {
     const { teamId } = eventPayload;
 
-    return this.authService.deleteWorkspaceById(teamId);
+    return this.authService.deleteWorkspaceByTeamId(teamId);
   }
 }
