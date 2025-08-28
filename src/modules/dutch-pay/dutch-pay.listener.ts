@@ -1,24 +1,24 @@
 import { DutchPayService } from './dutch-pay.service';
-import { OnEvent } from '@nestjs/event-emitter';
 import { DUTCH_PAY_CREATED_EVENT, DUTCH_PAY_DELETED_EVENT, PARTICIPANT_PAID_BACK_EVENT } from './dutch-pay.constant';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { CustomOnEvent } from '../../event-emitter/event-emitter.decorator';
 
 @Injectable()
 export class DutchPayListener {
   constructor(private readonly dutchPayService: DutchPayService) {}
 
-  @OnEvent(DUTCH_PAY_CREATED_EVENT, { async: true })
+  @CustomOnEvent(DUTCH_PAY_CREATED_EVENT, { async: true })
   handleDutchPayCreatedEvent(dutchPayId: number): Promise<void> {
     return this.dutchPayService.handleDutchPayCreatedEvent(dutchPayId);
   }
 
-  @OnEvent(PARTICIPANT_PAID_BACK_EVENT, { async: true })
+  @CustomOnEvent(PARTICIPANT_PAID_BACK_EVENT, { async: true })
   handleParticipantPaidBackEvent(participantId: number): Promise<void> {
     return this.dutchPayService.handleParticipantPaidBackEvent(participantId);
   }
 
-  @OnEvent(DUTCH_PAY_DELETED_EVENT, { async: true })
+  @CustomOnEvent(DUTCH_PAY_DELETED_EVENT, { async: true })
   handleDutchPayDeletedEvent(dutchPayId: number): Promise<void> {
     return this.dutchPayService.handleDutchPayDeletedEvent(dutchPayId);
   }

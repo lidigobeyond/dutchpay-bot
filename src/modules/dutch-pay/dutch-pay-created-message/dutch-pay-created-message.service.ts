@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SlackService } from '../../../slack/slack.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Dutchpay } from '../../../database/entities/dutchpay.entity';
 import { BlockActionsPayload } from '../../../slack/types/payloads/block-actions-payload';
 import { DUTCH_PAY_DELETED_EVENT } from '../dutch-pay.constant';
+import { CustomEventEmitter } from '../../../event-emitter/event-emitter.service';
 
 @Injectable()
 export class DutchPayCreatedMessageService {
@@ -13,7 +13,7 @@ export class DutchPayCreatedMessageService {
 
   constructor(
     private readonly slackService: SlackService,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly customEventEmitter: CustomEventEmitter,
     @InjectRepository(Dutchpay) private readonly dutchpayRepository: Repository<Dutchpay>,
   ) {}
 
@@ -41,6 +41,6 @@ export class DutchPayCreatedMessageService {
     await this.dutchpayRepository.save(dutchpay);
 
     // 더치페이 삭제 이벤트 발행
-    this.eventEmitter.emit(DUTCH_PAY_DELETED_EVENT, dutchpay.id);
+    this.customEventEmitter.emit(DUTCH_PAY_DELETED_EVENT, dutchpay.id);
   }
 }

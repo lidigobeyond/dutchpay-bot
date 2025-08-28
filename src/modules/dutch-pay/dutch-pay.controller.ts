@@ -5,17 +5,17 @@ import { ParseInteractionPayloadPipe } from '../../slack/pipes/parse-interaction
 import { InteractionPayload } from '../../slack/types/payloads/interaction-payload';
 import { BlockActionsPayload } from '../../slack/types/payloads/block-actions-payload';
 import { ViewSubmissionPayload } from '../../slack/types/payloads/view-submission-payload';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DutchPayService } from './dutch-pay.service';
 import { APP_UNINSTALLED_EVENT, BLOCK_ACTION, VIEW_SUBMISSION } from './dutch-pay.constant';
 import { EventPayload } from '../../slack/types/payloads/event-payload';
 import { ParseEventPayloadPipe } from '../../slack/pipes/parse-event-payload.pipe';
 import { UrlVerifiedEventPayload } from '../../slack/types/payloads/url-verified-event-payload';
 import { EventType } from '../../slack/types/events/event';
+import { CustomEventEmitter } from '../../event-emitter/event-emitter.service';
 
 @Controller('dutch-pay-app')
 export class DutchPayController {
-  constructor(private readonly eventEmitter: EventEmitter2, private readonly dutchPayService: DutchPayService) {}
+  constructor(private readonly customEventEmitter: CustomEventEmitter, private readonly dutchPayService: DutchPayService) {}
 
   @Post('slash_command_was_invoked')
   async handleSlashCommand(@Body(ClassTransformPipe) payload: SlashCommandPayload): Promise<void> {
@@ -39,7 +39,7 @@ export class DutchPayController {
 
     const ACTION_ID = actions[0].actionId;
 
-    this.eventEmitter.emit(`${BLOCK_ACTION}/${ACTION_ID}`, payload);
+    this.customEventEmitter.emit(`${BLOCK_ACTION}/${ACTION_ID}`, payload);
   }
 
   handleViewSubmission(payload: ViewSubmissionPayload) {
@@ -47,7 +47,7 @@ export class DutchPayController {
 
     const VIEW_EXTERNAL_ID = view.external_id;
 
-    this.eventEmitter.emit(`${VIEW_SUBMISSION}/${VIEW_EXTERNAL_ID}`, payload);
+    this.customEventEmitter.emit(`${VIEW_SUBMISSION}/${VIEW_EXTERNAL_ID}`, payload);
   }
 
   @Post('event_occurred')
@@ -91,6 +91,6 @@ export class DutchPayController {
    * @param payload
    */
   handleAppUninstalledEvent(payload: EventPayload) {
-    this.eventEmitter.emit(APP_UNINSTALLED_EVENT, payload);
+    this.customEventEmitter.emit(APP_UNINSTALLED_EVENT, payload);
   }
 }

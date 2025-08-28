@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SlackService } from '../../../slack/slack.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DutchPayModal } from './dto/dutch-pay-modal.dto';
 import { BlockActionsPayload } from '../../../slack/types/payloads/block-actions-payload';
 import { ViewSubmissionPayload } from '../../../slack/types/payloads/view-submission-payload';
@@ -10,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dutchpay } from '../../../database/entities/dutchpay.entity';
 import { Repository } from 'typeorm';
 import { Participant } from '../../../database/entities/participant.entity';
+import { CustomEventEmitter } from '../../../event-emitter/event-emitter.service';
 
 @Injectable()
 export class DutchPayModalService {
@@ -17,7 +17,7 @@ export class DutchPayModalService {
 
   constructor(
     private readonly slackService: SlackService,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly customEventEmitter: CustomEventEmitter,
     @InjectRepository(Dutchpay) private readonly dutchpayRepository: Repository<Dutchpay>,
     @InjectRepository(Participant) private readonly participantRepository: Repository<Participant>,
   ) {}
@@ -83,6 +83,6 @@ export class DutchPayModalService {
     await this.dutchpayRepository.save(dutchpay);
 
     // 더치페이 생성 완료 이벤트 발행
-    this.eventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchpay.id);
+    this.customEventEmitter.emit(DUTCH_PAY_CREATED_EVENT, dutchpay.id);
   }
 }
